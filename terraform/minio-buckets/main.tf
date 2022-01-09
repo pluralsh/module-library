@@ -1,7 +1,8 @@
 resource "minio_s3_bucket" "airbyte" {
-  for_each = to_set(var.bucket_names)
-  bucket   = each.key
-  acl      = var.acl
+  for_each      = to_set(var.bucket_names)
+  bucket        = each.key
+  acl           = var.acl
+  force_destroy = true
 }
 
 
