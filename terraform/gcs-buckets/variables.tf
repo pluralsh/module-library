@@ -3,9 +3,9 @@ variable "bucket_names" {
 }
 
 variable "service_account_email" {
-  type = "string"
+  type = string
 }
 
 variable "project_id" {
-  type = "string"
+  type = string
 }

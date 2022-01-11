@@ -1,5 +1,5 @@
 resource "minio_s3_bucket" "airbyte" {
-  for_each      = to_set(var.bucket_names)
+  for_each      = toset(var.bucket_names)
   bucket        = each.key
   acl           = var.acl
   force_destroy = true
@@ -8,7 +8,7 @@ resource "minio_s3_bucket" "airbyte" {
 
 resource "minio_iam_policy" "admin" {
   name   = "minio-${var.user_name}"
-  policy = data.minio_iam_policy_document.airbyte.json
+  policy = data.minio_iam_policy_document.admin.json
 }
 
 resource "minio_iam_user" "user" {

@@ -4,31 +4,31 @@ variable "bucket_names" {
 }
 
 variable "acl" {
-  type = "string"
+  type = string
   default = "private"
 }
 
 variable "user_name" {
-  type = "string"
+  type = string
   default = "minio"
 }
 
 variable "minio_namespace" {
-  type = "string"
+  type = string
   default = "minio"
 }
 
 variable "minio_root_secret" {
-  type = "string"
+  type = string
   default = "minio-root-secret"
 }
 
 variable "minio_server" {
-  type = "string"
+  type = string
 }
 
 variable "minio_region" {
-  type = "string"
+  type = string
   description = "Default MinIO region"
   default     = "us-east-1"
 }
