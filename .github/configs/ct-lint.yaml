@@ -3,7 +3,7 @@
 # Only Used for the CT Lint Stage
 remote: origin
 chart-dirs:
-  - charts
+  - helm
 chart-repos:
   - plural=https://pluralsh.github.io/module-library
 helm-extra-args: "--timeout 600s"  
