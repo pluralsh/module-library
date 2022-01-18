@@ -1,2 +1,14 @@
 apiVersion: v1
-entries: {}
+entries:
+  postgres:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-01-18T15:09:21.222113319Z"
+    description: A Helm chart for Kubernetes
+    digest: 270efbcbf9d21d9e3b9899c27bae0d82e8088ae896a92fca0e9ef92c1dc81260
+    name: postgres
+    type: application
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/postgres-0.1.0/postgres-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-01-18T15:09:21.222118119Z"
