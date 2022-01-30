@@ -34,10 +34,10 @@ spec:
     - name: "DATA_SOURCE_USER"
       valueFrom:
         secretKeyRef:
-          name: postgres.plural-postgres.credentials.postgresql.acid.zalan.do
+          name: postgres.{{ .Values.team }}-{{ .Values.dbName }}.credentials.postgresql.acid.zalan.do
           key: username
     - name: "DATA_SOURCE_PASS"
       valueFrom:
         secretKeyRef:
-          name: postgres.plural-postgres.credentials.postgresql.acid.zalan.do
+          name: postgres.{{ .Values.team }}-{{ .Values.dbName }}.credentials.postgresql.acid.zalan.do
           key: password
