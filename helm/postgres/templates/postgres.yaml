@@ -20,7 +20,7 @@ spec:
   databases:
     {{ .Values.user }}: {{ .Values.dbName }}  # dbname: owner
   postgresql:
-    version: {{ .Values.version }}
+    version: {{ .Values.version | quote }}
   sidecars:
   - image: gcr.io/pluralsh/postgres-exporter:0.8.0
     name: exporter
