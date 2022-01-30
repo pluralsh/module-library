@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "bucket" {
-  for_each      = var.bucket_names
+  for_each      = toset(var.bucket_names)
   bucket        = each.key
   acl           = var.acl
   force_destroy = true
