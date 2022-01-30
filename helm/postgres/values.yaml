@@ -4,6 +4,8 @@ user: example
 dbName: plural
 ownerChart: null
 
+version: '13'
+
 # scaling information
 
 replicas: 1
