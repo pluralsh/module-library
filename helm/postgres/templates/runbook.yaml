@@ -31,7 +31,7 @@ spec:
     prometheus:
       format: none
       legend: $persistentvolumeclaim
-      query: (kubelet_volume_stats_capacity_bytes{namespace="{{ .Release.Namespace }}", persistentvolumeclaim=~"pgdata-{{ .Values.team }}-{{ .Values.dbName }}-.*"} - kubelet_volume_stats_available_bytes{namespace="{{ .Release.Namespace }}", persistentvolumeclaim=~"pgdata-{{ .Values.team }}-airbyte-.*"}) / kubelet_volume_stats_capacity_bytes{namespace="{{ .Release.Namespace }}", persistentvolumeclaim=~"pgdata-{{ .Values.team }}-airbyte-.*"}
+      query: (kubelet_volume_stats_capacity_bytes{namespace="{{ .Release.Namespace }}", persistentvolumeclaim=~"pgdata-{{ .Values.team }}-{{ .Values.dbName }}-.*"} - kubelet_volume_stats_available_bytes{namespace="{{ .Release.Namespace }}", persistentvolumeclaim=~"pgdata-{{ .Values.team }}-{{ .Values.dbName }}-.*"}) / kubelet_volume_stats_capacity_bytes{namespace="{{ .Release.Namespace }}", persistentvolumeclaim=~"pgdata-{{ .Values.team }}-{{ .Values.dbName }}-.*"}
   - name: statefulset
     type: kubernetes
     kubernetes:
