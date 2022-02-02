@@ -1,7 +1,7 @@
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: {{ .Values.team }}-{{ .Values.dbName }}
+  name: {{ .Values.team }}-{{ .Values.dbName }}-postgres
   labels:
   {{ include "postgres.labels" . | nindent 4 }}
 spec:
@@ -34,10 +34,10 @@ spec:
     - name: "DATA_SOURCE_USER"
       valueFrom:
         secretKeyRef:
-          name: postgres.{{ .Values.team }}-{{ .Values.dbName }}.credentials.postgresql.acid.zalan.do
+          name: postgres.{{ .Values.team }}-{{ .Values.dbName }}-postgres.credentials.postgresql.acid.zalan.do
           key: username
     - name: "DATA_SOURCE_PASS"
       valueFrom:
         secretKeyRef:
-          name: postgres.{{ .Values.team }}-{{ .Values.dbName }}.credentials.postgresql.acid.zalan.do
+          name: postgres.{{ .Values.team }}-{{ .Values.dbName }}-postgres.credentials.postgresql.acid.zalan.do
           key: password
