@@ -40,7 +40,7 @@ locals {
               )
             },
           )
-        }
+        } if contains(data.aws_ec2_instance_type_offerings.example.k.locations, subnet.availability_zone)
      ]
   ])
 
@@ -64,4 +64,14 @@ locals {
       for taint in attr.taints : { pool = name, key = taint.key, value = taint.value, effect = taint.effect }
     ]
   ]) : format("%s/%s", obj.pool, obj.key) => obj }
+}
+
+data "aws_ec2_instance_type_offerings" "example" {
+  for_each = local.node_groups_merged
+  filter {
+    name   = "instance-type"
+    values = lookup(each.value, "instance_types")
+  }
+
+  location_type = "availability-zone"
 }
