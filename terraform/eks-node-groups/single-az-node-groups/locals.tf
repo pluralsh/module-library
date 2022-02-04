@@ -40,7 +40,7 @@ locals {
               )
             },
           )
-        } if contains(data.aws_ec2_instance_type_offerings.example[k].locations, subnet.availability_zone)
+        } if contains(data.aws_ec2_instance_type_offerings.node_groups[k].locations, subnet.availability_zone)
      ]
   ])
 
@@ -66,7 +66,7 @@ locals {
   ]) : format("%s/%s", obj.pool, obj.key) => obj }
 }
 
-data "aws_ec2_instance_type_offerings" "example" {
+data "aws_ec2_instance_type_offerings" "node_groups" {
   for_each = local.node_groups_merged
   filter {
     name   = "instance-type"
