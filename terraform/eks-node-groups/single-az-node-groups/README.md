@@ -3,7 +3,8 @@
 Helper submodule to create and manage resources related to `eks_node_groups`.
 
 ## Assumptions
-* Designed for use by the parent module and not directly by end users
+* Designed for use by the Plural parent module and not directly by end users
+* The node groups will be split across the subnets, so that there is a node group for each availability zone
 
 ## Node Groups' IAM Role
 The role ARN specified in `var.default_iam_role_arn` will be used by default. In a simple configuration this will be the worker role created by the parent module.
