@@ -44,3 +44,13 @@ variable "taints" {
 variable "node_group_name" {
   type = string
 }
+
+variable "release_version" {
+  type = string
+  default = "1.21.2-20210813"
+}
+
+variable "ami_type" {
+  type = string
+  default = "AL2_x86_64"
+}

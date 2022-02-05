@@ -12,14 +12,16 @@ data "aws_eks_node_group" "main" {
 }
 
 resource "aws_eks_node_group" "gpu_inf_small" {
-  cluster_name    = data.aws_eks_cluster.cluster.name
-  node_group_name = var.node_group_name
-  node_role_arn   = data.aws_eks_node_group.main.node_role_arn
-  subnet_ids      = var.subnet_ids
-  instance_types  = var.instance_types
-  release_version = var.ami_release_version
-  disk_size       = 50
-  capacity_type   = var.capacity_type
+  cluster_name         = data.aws_eks_cluster.cluster.name
+  node_group_name      = var.node_group_name
+  node_role_arn        = data.aws_eks_node_group.main.node_role_arn
+  subnet_ids           = var.subnet_ids
+  instance_types       = var.instance_types
+  disk_size            = 50
+  capacity_type        = var.capacity_type
+  release_version      = var.release_version
+  force_update_version = true
+  ami_type             = var.ami_type
 
   scaling_config {
     desired_size = var.desired_size
@@ -27,11 +29,16 @@ resource "aws_eks_node_group" "gpu_inf_small" {
     max_size     = var.max_capacity
   }
 
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes        = [scaling_config.0.desired_size]
+  }
+
   tags   = var.tags
   labels = var.labels
 
   dynamic "taint" {
-    for_each = each.value["taints"]
+    for_each = var.taints
     content {
       key    = taint.value.key
       value  = lookup(taint.value, "value")
