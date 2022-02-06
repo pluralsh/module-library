@@ -3,6 +3,8 @@ team: plural
 user: example
 dbName: plural
 ownerChart: null
+suffix: ""
+infix: ""
 
 version: '13'
 

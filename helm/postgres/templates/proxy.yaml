@@ -8,7 +8,7 @@ spec:
   type: db
   target: service/{{ .Values.dbName }}-master
   credentials:
-    secret: {{ .Values.user }}.{{ .Values.team }}-{{ .Values.dbName }}.credentials.postgresql.acid.zalan.do
+    secret: {{ .Values.user }}.{{ include "postgres.crd-name" . }}.credentials.postgresql.acid.zalan.do
     key: password
     user: {{ .Values.user }}
   dbConfig:
