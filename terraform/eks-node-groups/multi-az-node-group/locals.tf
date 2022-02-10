@@ -6,6 +6,7 @@ locals {
       key_name                = var.workers_group_defaults["key_name"]
       launch_template_id      = null
       launch_template_version = "$Latest"
+      subnets = var.private_subnet_ids
       labels = merge(
         lookup(var.node_groups_defaults, "k8s_labels", {}),
         lookup(var.node_groups[k], "k8s_labels", {})
