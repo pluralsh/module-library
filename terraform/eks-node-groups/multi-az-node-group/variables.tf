@@ -1,56 +1,39 @@
 variable "cluster_name" {
-  type = string
+  description = "Name of parent cluster"
+  type        = string
 }
 
-variable "subnet_ids" {
-  type = list(string)
-}
-
-variable "instance_types" {
-  type = list(string)
-}
-
-variable "capacity_type" {
-  type = string
-  default = "ON_DEMAND"
-}
-
-variable "desired_size" {
-  type = number
-}
-
-variable "min_capacity" {
-  type = number
-  default = 1
-}
-
-variable "max_capacity" {
-  type = number
-  default = 5
+variable "default_iam_role_arn" {
+  description = "ARN of the default IAM worker role to use if one is not specified in `var.node_groups` or `var.node_groups_defaults`"
+  type        = string
 }
 
 variable "tags" {
-  type = map(string)
+  description = "A map of tags to add to all resources"
+  type        = map(string)
 }
 
-variable "labels" {
-  type = map(string)
+variable "node_groups_defaults" {
+  description = "map of maps of node groups to create. See \"`node_groups` and `node_groups_defaults` keys\" section in README.md for more details"
+  type        = any
 }
 
-variable "taints" {
-  type = list
+variable "node_groups" {
+  description = "Map of maps of `eks_node_groups` to create. See \"`node_groups` and `node_groups_defaults` keys\" section in README.md for more details"
+  type        = any
+  default     = {}
 }
 
-variable "node_group_name" {
-  type = string
+# Hack for a homemade `depends_on` https://discuss.hashicorp.com/t/tips-howto-implement-module-depends-on-emulation/2305/2
+# Will be removed in Terraform 0.13 with the support of module's `depends_on` https://github.com/hashicorp/terraform/issues/10462
+variable "ng_depends_on" {
+  description = "List of references to other resources this submodule depends on"
+  type        = any
+  default     = null
 }
 
-variable "release_version" {
-  type = string
-  default = "1.21.2-20210813"
-}
-
-variable "ami_type" {
-  type = string
-  default = "AL2_x86_64"
+variable "set_desired_size" {
+  description = "allow desired size to be pinned for the node group"
+  type = bool
+  default = false
 }
