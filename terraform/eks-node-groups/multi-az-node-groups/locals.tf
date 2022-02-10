@@ -3,7 +3,7 @@ locals {
   node_groups_expanded = { for k, v in var.node_groups : k => merge(
     {
       iam_role_arn            = var.default_iam_role_arn
-      key_name                = var.workers_group_defaults["key_name"]
+      key_name                = ""
       launch_template_id      = null
       launch_template_version = "$Latest"
       subnets = var.private_subnet_ids
