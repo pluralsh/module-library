@@ -3,6 +3,16 @@ entries:
   config-overlays:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2022-02-24T04:19:08.183518153Z"
+    description: simple chart for generating plural configuration overlays
+    digest: f3cd2c406616767ef0a83a85ba6ecd3f313224efd6a3a71ce92df2e7ab224f17
+    name: config-overlays
+    type: application
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/config-overlays-0.1.1/config-overlays-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2022-02-24T04:00:05.328371404Z"
     description: simple chart for generating plural configuration overlays
     digest: af150bbeedfbd7751e622a13d741e3506c276c7f1eed122b4f33c9e5d75bfcbb
@@ -72,4 +82,4 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/postgres-0.1.0/postgres-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-24T04:00:05.328386401Z"
+generated: "2022-02-24T04:19:08.183534984Z"
