@@ -1,0 +1,26 @@
+{{- define "config-overlays.crd" -}}
+apiVersion: platform.plural.sh/v1alpha1
+kind: ConfigurationOverlay
+metadata:
+  name: {{ .name }}
+  labels:
+{{ include "config-overlays.labels" . | indent 4 }}
+{{ if .labels }}
+  {{ toYaml .labels | nindent 4 }}
+{{ end }}
+spec:
+{{ toYaml .spec | nindent 2 }}
+{{- end -}}
+
+{{ $context := . }}
+{{ $rendered := false }}
+{{ range $key, $overlay := .Values.configOverlays }}
+  {{- $_ := set $context "name" $key -}}
+  {{- $_ := set $context "labels" $overlay.labels -}}
+  {{- $_ := set $context "annotations" $overlay.annotations -}}
+  {{ if $rendered }}
+---
+  {{ end }}
+  {{ include "config-overlays.crd" $context | nindent 0 }}
+  {{- $rendered = true -}}
+{{- end -}}
