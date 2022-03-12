@@ -1,0 +1,17 @@
+# Default values for oidc-config.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+secret:
+  name: oidc-config
+  issuer: PLACEHOLDER
+  upstream: http://localhost:80
+  clientId: PLACEHOLDER
+  clientSecret: PLACEHOLDER
+  cookieSecret: PLACEHOLDER
+
+service:
+  selector:
+    app: airbyte
+  name: oauth-proxy
+  webPort: 4180
+  metricsPort: 44180

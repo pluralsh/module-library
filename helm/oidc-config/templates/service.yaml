@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.name }}
+  labels:
+    endpoint: oauth2-proxy
+    {{- include "oidc-config.labels" . | nindent 4 }}
+spec:
+  ports:
+  - port: 80
+    targetPort: {{ .Values.service.webPort }}
+    protocol: TCP
+    name: http-oauth
+  - port: 44180
+    targetPort: {{ .Values.service.metricsPort }}
+    protocol: TCP
+    name: metrics-oauth
+  selector:
+    {{ .Values.service.selector | toYaml | nindent 4 }}
