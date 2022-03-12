@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    {{- include "oidc-config.labels" . | nindent 4 }}
+  name: oauth2-proxy-service-monitor
+spec:
+  endpoints:
+  - interval: 5s
+    path: /metrics
+    port: metrics-oauth
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      endpoint: oauth2-proxy
