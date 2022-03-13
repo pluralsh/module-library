@@ -5,14 +5,13 @@ secret:
   name: oidc-config
   issuer: PLACEHOLDER
   upstream: http://localhost:80
-  clientId: PLACEHOLDER
+  clientID: PLACEHOLDER
   clientSecret: PLACEHOLDER
   cookieSecret: PLACEHOLDER
   env: {}
 
 service:
-  selector:
-    app: airbyte
+  selector: {}
   name: oauth-proxy
   webPort: 4180
   metricsPort: 44180
