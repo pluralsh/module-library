@@ -8,6 +8,7 @@ secret:
   clientId: PLACEHOLDER
   clientSecret: PLACEHOLDER
   cookieSecret: PLACEHOLDER
+  env: {}
 
 service:
   selector:
@@ -15,3 +16,5 @@ service:
   name: oauth-proxy
   webPort: 4180
   metricsPort: 44180
+
+users: {}
