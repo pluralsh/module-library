@@ -1,0 +1,13 @@
+rbacRules:
+- apiGroups:
+  - app.k8s.io
+  resources:
+  - applications
+  verbs:
+  - get
+  - watch
+  - list
+
+repository: plural
+promoteTag: warm
+testName: plural-test

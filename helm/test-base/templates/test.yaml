@@ -1,0 +1,14 @@
+apiVersion: test.plural.sh/v1alpha1
+kind: TestSuite
+metadata:
+  name: {{ .Values.testName }}-{{ randAlphaNum 5 }}
+spec:
+  repository: {{ .Values.repository }}
+  promoteTag: {{ .Values.promoteTag }}
+  steps:
+  - name: watch
+    description: it wait until the {{ .Values.repository }} app crd is ready
+    template:
+      container:
+        image: gcr.io/pluralsh/test-base:0.1.4
+        args: ["{{ .Values.repository }}"]
