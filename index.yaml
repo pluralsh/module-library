@@ -160,4 +160,16 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/postgres-0.1.0/postgres-0.1.0.tgz
     version: 0.1.0
-generated: "2022-03-13T06:13:46.114067404Z"
+  test-base:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-04-07T21:15:29.916345706Z"
+    description: includes the necessary resources to run a simple plural integration
+      test
+    digest: caf356ef3996725dade98b8c33bc0e89d9e267b7f837da0a7fc6810f0d7261b8
+    name: test-base
+    type: application
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.0/test-base-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-04-07T21:15:29.916379006Z"
