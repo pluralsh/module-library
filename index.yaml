@@ -163,6 +163,17 @@ entries:
   test-base:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-04-08T23:41:00.426171151Z"
+    description: includes the necessary resources to run a simple plural integration
+      test
+    digest: c8420a30d858721b32e37a177c9d7ade1098b94dd625ca1164398bfe563255a7
+    name: test-base
+    type: application
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.1/test-base-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-04-07T21:15:29.916345706Z"
     description: includes the necessary resources to run a simple plural integration
       test
@@ -172,4 +183,4 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.0/test-base-0.1.0.tgz
     version: 0.1.0
-generated: "2022-04-07T21:15:29.916379006Z"
+generated: "2022-04-08T23:41:00.426218851Z"
