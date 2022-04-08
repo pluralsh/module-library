@@ -1,7 +1,7 @@
 apiVersion: test.plural.sh/v1alpha1
 kind: TestSuite
 metadata:
-  name: {{ .Values.testName }}-{{ randAlphaNum 5 }}
+  name: {{ .Values.testName }}-{{ randAlphaNum 5 | lower }}
 spec:
   repository: {{ .Values.repository }}
   promoteTag: {{ .Values.promoteTag }}
