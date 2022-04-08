@@ -11,4 +11,5 @@ spec:
     template:
       container:
         image: gcr.io/pluralsh/test-base:0.1.4
+        cmd: [/usr/local/bin/watch.sh]
         args: ["{{ .Values.repository }}"]
