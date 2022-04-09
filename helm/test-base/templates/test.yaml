@@ -10,6 +10,5 @@ spec:
     description: it wait until the {{ .Values.repository }} app crd is ready
     template:
       container:
-        image: gcr.io/pluralsh/test-base:0.1.4
-        cmd: [/usr/local/bin/watch.sh]
+        image: gcr.io/pluralsh/test-base:0.1.6
         args: ["{{ .Values.repository }}"]
