@@ -9,3 +9,8 @@ variable "service_account_email" {
 variable "project_id" {
   type = string
 }
+
+variable "location" {
+  type = string
+  default = "US"
+}
