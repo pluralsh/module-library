@@ -160,6 +160,17 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/postgres-0.1.0/postgres-0.1.0.tgz
     version: 0.1.0
+  postgres-observability:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-07-22T13:07:58.562887458Z"
+    description: adds all resources to observe a zalando postgres instance
+    digest: 2ecff6ab0d00fda5d342b576df620fa75dd8e4f62ad030e87d38c69c26fb7e29
+    name: postgres-observability
+    type: application
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/postgres-observability-0.1.0/postgres-observability-0.1.0.tgz
+    version: 0.1.0
   test-base:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -205,4 +216,4 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.0/test-base-0.1.0.tgz
     version: 0.1.0
-generated: "2022-04-09T00:43:31.481978602Z"
+generated: "2022-07-22T13:07:58.562954798Z"
