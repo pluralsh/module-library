@@ -1,0 +1,10 @@
+# Default values for postgres-observability.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+team: plural
+user: example
+dbName: plural
+ownerChart: null
+suffix: ""
+infix: ""

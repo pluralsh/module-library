@@ -1,0 +1,17 @@
+apiVersion: platform.plural.sh/v1alpha1
+kind: Proxy
+metadata:
+  name: db
+  labels:
+{{ include "postgres.labels" . | indent 4 }}
+spec:
+  type: db
+  target: service/{{ .Values.dbName }}-master
+  credentials:
+    secret: {{ .Values.user }}.{{ include "postgres.crd-name" . }}.credentials.postgresql.acid.zalan.do
+    key: password
+    user: {{ .Values.user }}
+  dbConfig:
+    name: {{ .Values.dbName }}
+    engine: postgres
+    port: 5432

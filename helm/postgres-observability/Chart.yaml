@@ -1,0 +1,6 @@
+apiVersion: v2
+name: postgres-observability
+description: adds all resources to observe a zalando postgres instance
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
