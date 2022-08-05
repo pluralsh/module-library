@@ -1,3 +1,6 @@
+serviceAccount:
+  annotations: {}
+
 rbacRules:
 - apiGroups:
   - app.k8s.io
@@ -8,6 +11,14 @@ rbacRules:
   - watch
   - list
 
-repository: plural
+application: plural
 promoteTag: warm
 testName: plural-test
+
+steps:
+- name: watch
+  description: it wait until the `plural` app crd is ready
+  template:
+    container:
+      image: gcr.io/pluralsh/test-base:0.1.6
+      args: ["plural"]
