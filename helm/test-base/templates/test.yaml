@@ -4,6 +4,8 @@ metadata:
   name: {{ .Values.testName }}-{{ randAlphaNum 5 | lower }}
   labels:
     {{- include "test-base.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
 spec:
   repository: {{ .Values.application }}
   promoteTag: {{ .Values.promoteTag }}
