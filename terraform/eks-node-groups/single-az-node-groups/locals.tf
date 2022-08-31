@@ -33,7 +33,7 @@ locals {
               min_capacity = ceil(v.min_capacity/length(var.private_subnets))
               max_capacity = ceil(v.max_capacity/length(var.private_subnets))
               desired_capacity = ceil(v.desired_capacity/length(var.private_subnets))
-              name = "${v.name}-${subnet.availability_zone}"
+              name = "${v.name}-${subnet.availability_zone}-${subnet.id}"
               labels = merge(
                 lookup(v, "labels", {}),
                 {"topology.ebs.csi.aws.com/zone" = "${subnet.availability_zone}"}
