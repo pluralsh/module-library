@@ -4,6 +4,10 @@ metadata:
   name: {{ include "postgres.crd-name" . }}
   labels:
   {{ include "postgres.labels" . | nindent 4 }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   teamId: {{ .Values.team }}
   volume:
@@ -13,10 +17,8 @@ spec:
     {{ .Values.user }}:  # database owner
     - superuser
     - createdb
-  {{ if .Values.resources }}
   resources:
-  {{ mergeOverwrite .Values.default.resources .Values.resources | toYaml | nindent 4 }}
-  {{ end }}
+  {{- mergeOverwrite .Values.default.resources .Values.resources | toYaml | nindent 4 }}
   databases:
     {{ .Values.user }}: {{ .Values.dbName }}  # dbname: owner
   postgresql:

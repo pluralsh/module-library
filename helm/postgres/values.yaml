@@ -6,6 +6,8 @@ ownerChart: null
 suffix: ""
 infix: ""
 
+annotations: {}
+
 version: '13'
 
 # scaling information
