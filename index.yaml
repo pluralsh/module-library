@@ -102,6 +102,16 @@ entries:
   postgres:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-10-20T13:53:12.737102249Z"
+    description: A Helm chart for Kubernetes
+    digest: 23049e93ad1649e63577517bd262e957a0f1e6da62a07b60351d1d919480e58c
+    name: postgres
+    type: application
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/postgres-0.1.7/postgres-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-10-05T12:56:34.325064324Z"
     description: A Helm chart for Kubernetes
     digest: b5770f64886aae41f500355ce120e4544bec3cdbb31761e6e7bcce009228396a
@@ -171,6 +181,16 @@ entries:
     - https://github.com/pluralsh/module-library/releases/download/postgres-0.1.0/postgres-0.1.0.tgz
     version: 0.1.0
   postgres-observability:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-10-20T13:53:13.027960722Z"
+    description: adds all resources to observe a zalando postgres instance
+    digest: a1138ecc15b417d5a97fde82aa8d9c8492529534f56256f08eb1594f6bf154c1
+    name: postgres-observability
+    type: application
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/postgres-observability-0.1.1/postgres-observability-0.1.1.tgz
+    version: 0.1.1
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2022-07-22T13:07:58.562887458Z"
@@ -248,4 +268,4 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.0/test-base-0.1.0.tgz
     version: 0.1.0
-generated: "2022-10-05T12:56:34.325131925Z"
+generated: "2022-10-20T13:53:13.028218622Z"
