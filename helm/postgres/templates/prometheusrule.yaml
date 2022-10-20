@@ -9,7 +9,7 @@ spec:
   groups:
   - name: {{ .Values.dbName }}
     rules:
-    - alert: {{ .Values.dbName }}postgrescpu
+    - alert: {{ .Values.dbName }}PostgresCpuHigh
       expr: |
         (
           sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"}[5m])) 
@@ -20,9 +20,9 @@ spec:
         severity: warning
         namespace: {{ .Release.Namespace }}
       annotations:
-        summary: airbyte dbs's cpu has gotten too high
-        description: the cpu utilization of your plural airbyte is higher than recommended
-    - alert: {{ .Values.dbName }}postgresmekm
+        summary: {{ .Values.ownerChart }} dbs's cpu usage has gotten too high
+        description: the cpu utilization of your plural {{ .Values.ownerChart }} is higher than recommended
+    - alert: {{ .Values.dbName }}PostgresMemHigh
       expr: |
         (
           sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"})
@@ -33,6 +33,5 @@ spec:
         severity: warning
         namespace: {{ .Release.Namespace }}
       annotations:
-        summary: airbyte db's memory has gotten too high
-        description: the memory utilization of your plural airbyte db is higher than recommended
-    
+        summary: {{ .Values.ownerChart }} db's memory usage has gotten too high
+        description: the memory utilization of your plural {{ .Values.ownerChart }} db is higher than recommended

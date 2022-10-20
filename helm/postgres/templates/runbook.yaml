@@ -7,10 +7,10 @@ metadata:
 {{ include "postgres.labels" . | indent 4 }}
 spec:
   name: Postgres Scaling
-  description: overview of how to accurately scale airbyte's postgres instance
+  description: overview of how to accurately scale {{ .Values.ownerChart }}'s postgres instance
   alerts:
-  - name: {{ .Values.dbName }}postgrescpu
-  - name: {{ .Values.dbName }}postgrescpu
+  - name: {{ .Values.dbName }}PostgresCpuHigh
+  - name: {{ .Values.dbName }}PostgresMemHigh
   display: |-
 {{ .Files.Get "runbooks/db-scaling.xml" | indent 4 }}
   datasources:
