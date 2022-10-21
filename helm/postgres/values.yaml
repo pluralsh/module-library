@@ -37,3 +37,4 @@ exporter:
         memory: 15Mi
       limits:
         memory: 20Mi
+        cpu: 10m
