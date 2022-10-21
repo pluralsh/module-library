@@ -10,6 +10,10 @@ metadata:
   {{- end }}
 spec:
   teamId: {{ .Values.team }}
+  {{- if .Values.clone }}
+  clone:
+  {{ toYaml .Values.clone | nindent 4 }}
+  {{- end }}
   volume:
     size: {{ .Values.storage.size }}
   numberOfInstances: {{ .Values.replicas }}

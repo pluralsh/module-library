@@ -10,6 +10,8 @@ annotations: {}
 
 version: '13'
 
+clone: null
+
 # scaling information
 
 replicas: 1
