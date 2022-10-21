@@ -4,7 +4,7 @@ user: example
 dbName: plural
 ownerChart: null
 suffix: ""
-infix: ""
+infix: "-postgres"
 
 annotations: {}
 
