@@ -28,6 +28,20 @@
             path="spec.template.spec.containers[0].resources.requests.memory" />
         </input>
       </box>
+      <box gap='xsmall'>
+        <input placeholder="250m" label='CPU Limit' name='cpu-limit'>
+          <valueFrom 
+            datasource="statefulset" 
+            doc="kubernetes.raw" 
+            path="spec.template.spec.containers[0].resources.limits.cpu" />
+        </input>
+        <input placeholder="1Gi" label='Memory Limit' name='memory-limit'>
+          <valueFrom 
+            datasource="statefulset" 
+            doc="kubernetes.raw" 
+            path="spec.template.spec.containers[0].resources.limits.memory" />
+        </input>
+      </box>
     </box>
   </box>
   <box direction='row' align='center' gap='small'>

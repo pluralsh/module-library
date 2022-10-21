@@ -24,3 +24,16 @@ default:
     limits:
       cpu: '2'
       memory: 1Gi
+
+exporter:
+  image:
+    repository: dkr.plural.sh/postgres/prometheuscommunity/postgres-exporter
+    tag: v0.11.1
+  resources: {}
+  default:
+    resources:
+      requests:
+        cpu: 1m
+        memory: 15Mi
+      limits:
+        memory: 20Mi

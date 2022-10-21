@@ -59,6 +59,20 @@ spec:
         - requests
         - memory
         valueFrom: memory
+      - path: 
+        - {{ default .Release.Namespace .Values.ownerChart }}
+        - postgres
+        - resources
+        - limits
+        - cpu
+        valueFrom: cpu-limit
+      - path:
+        - {{ default .Release.Namespace .Values.ownerChart }}
+        - postgres
+        - resources
+        - limits
+        - memory
+        valueFrom: memory-limit
       - path:
         - {{ default .Release.Namespace .Values.ownerChart }}
         - postgres

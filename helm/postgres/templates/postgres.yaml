@@ -24,8 +24,10 @@ spec:
   postgresql:
     version: {{ .Values.version | quote }}
   sidecars:
-  - image: gcr.io/pluralsh/postgres-exporter:0.8.0
+  - image: {{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}
     name: exporter
+    resources:
+    {{- mergeOverwrite .Values.exporter.default.resources .Values.exporter.resources | toYaml | nindent 7 }}
     ports:
     - containerPort: 9187
       name: http-metrics
