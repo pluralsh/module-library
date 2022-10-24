@@ -9,8 +9,8 @@ spec:
   name: Postgres Scaling
   description: overview of how to accurately scale {{ .Values.ownerChart }}'s postgres instance
   alerts:
-  - name: {{ .Values.dbName }}PostgresCpuHigh
-  - name: {{ .Values.dbName }}PostgresMemHigh
+  - name: {{ .Values.dbName }}PostgreSQLCpuHigh
+  - name: {{ .Values.dbName }}PostgreSQLMemHigh
   display: |-
 {{ .Files.Get "runbooks/db-scaling.xml" | indent 4 }}
   datasources:

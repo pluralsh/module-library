@@ -4,12 +4,12 @@ metadata:
   creationTimestamp: null
   labels:
     role: alert-rules
-  name: {{ .Values.dbName }}-rules
+  name: {{ .Values.dbName }}-postgres-rules
 spec:
   groups:
   - name: {{ .Values.dbName }}
     rules:
-    - alert: {{ .Values.dbName }}PostgresCpuHigh
+    - alert: {{ .Values.dbName }}PostgreSQLCpuHigh
       expr: |
         (
           sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"}[5m])) 
@@ -22,7 +22,7 @@ spec:
       annotations:
         summary: {{ .Values.ownerChart }} dbs's cpu usage has gotten too high
         description: the cpu utilization of your plural {{ .Values.ownerChart }} is higher than recommended
-    - alert: {{ .Values.dbName }}PostgresMemHigh
+    - alert: {{ .Values.dbName }}PostgreSQLMemHigh
       expr: |
         (
           sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"})
@@ -35,3 +35,104 @@ spec:
       annotations:
         summary: {{ .Values.ownerChart }} db's memory usage has gotten too high
         description: the memory utilization of your plural {{ .Values.ownerChart }} db is higher than recommended
+    - alert: {{ .Values.dbName }}PostgreSQLMaxConnectionsReached
+      expr: |
+        sum by (instance) (pg_stat_activity_count{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"})
+        >=
+        sum by (instance) (pg_settings_max_connections{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"})
+        -
+        sum by (instance) (pg_settings_superuser_reserved_connections{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"})
+      for: 5m
+      labels:
+        severity: warning
+        namespace: {{ .Release.Namespace }}
+      annotations:
+        summary: {{ .Values.ownerChart }} db has maxed out Postgres connections
+        description: "{{`{{`}} $labels.instance {{`}}`}} is exceeding the currently configured maximum Postgres connection limit (current value: {{`{{`}} $value {{`}}`}})."
+    - alert: {{ .Values.dbName }}PostgreSQLHighConnections
+      expr: |
+        sum by (instance) (pg_stat_activity_count{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"})
+        >
+        (
+          sum by (instance) (pg_settings_max_connections{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"})
+          -
+          sum by (instance) (pg_settings_superuser_reserved_connections{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"})
+        ) * 0.8
+      for: 5m
+      labels:
+        severity: warning
+        namespace: {{ .Release.Namespace }}
+      annotations:
+        summary: {{ .Values.ownerChart }} is over 80% of max Postgres connections.
+        description: |
+          {{`{{`}} $labels.instance {{`}}`}} is exceeding 80% of the currently configured
+          maximum Postgres connection limit (current value: {{`{{`}} $value }}). Please check
+          utilization graphs and confirm if this is normal service growth, abuse or
+          an otherwise temporary condition or if new resources need to be provisioned
+          (or the limits increased, which is mostly likely).
+    - alert: {{ .Values.dbName }}PostgreSQLDown
+      expr: pg_up{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"} != 1
+      for: 1m
+      labels:
+        severity: warning
+        namespace: {{ .Release.Namespace }}
+      annotations:
+        summary: {{ .Values.ownerChart }} db is not processing queries.
+        description: |
+          {{`{{`}} $labels.instance {{`}}`}} is rejecting query requests from the exporter,
+          and thus probably not allowing DNS requests to work either. User services
+          should not be effected provided at least 1 node is still alive.'
+    - alert: {{ .Values.dbName }}PostgreSQLSlowQueries
+      expr: |
+        avg by (datname) (
+          rate (
+            pg_stat_activity_max_tx_duration{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+",datname!~"template.*"}[2m]
+          )
+        ) > 2 * 60
+      for: 2m
+      labels:
+        severity: warning
+        namespace: {{ .Release.Namespace }}
+      annotations:
+        summary: {{ .Values.ownerChart }} db has a high number of slow queries on {{`{{`}} $labels.cluster {{`}}`}} for database {{`{{`}} $labels.datname {{`}}`}}.
+        description: PostgreSQL db has a high number of slow queries on {{`{{`}} $labels.cluster {{`}}`}} for database {{`{{`}} $labels.datname {{`}}`}}.
+    - alert: {{ .Values.dbName }}PostgreSQLQPS
+      expr: |
+        avg by (datname) (
+          irate(
+            pg_stat_database_xact_commit{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+",datname!~"template.*"}[5m]
+          )
+          +
+          irate(
+            pg_stat_database_xact_rollback{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+",datname!~"template.*"}[5m]
+          )
+        ) > 10000
+      for: 1m
+      labels:
+        severity: warning
+        namespace: {{ .Release.Namespace }}
+      annotations:
+        summary: {{ .Values.ownerChart }} db has a high number of queries per second {{`{{`}} $labels.cluster {{`}}`}} for database {{`{{`}} $labels.datname {{`}}`}}.
+        description: "{{ .Values.ownerChart }} db has high a number of queries per second on {{`{{`}} $labels.cluster {{`}}`}} for database {{`{{`}} $labels.datname {{`}}`}} with a value of {{`{{`}} $value {{`}}`}}."
+    - alert: {{ .Values.dbName }}PostgreSQLCacheHitRatio
+      expr: |
+        avg by (datname) (
+          rate(pg_stat_database_blks_hit{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+",datname!~"template.*"}[5m])
+          /
+          (
+            rate(
+              pg_stat_database_blks_hit{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+",datname!~"template.*"}[5m]
+            )
+            +
+            rate(
+              pg_stat_database_blks_read{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+",datname!~"template.*"}[5m]
+            )
+          )
+        ) < 0.98
+      for: 1m
+      labels:
+        severity: warning
+        namespace: {{ .Release.Namespace }}
+      annotations:
+        summary: {{ .Values.ownerChart }} db has a low cache hit rate on {{`{{`}} $labels.cluster {{`}}`}} for database {{`{{`}} $labels.datname {{`}}`}}.
+        description: "{{`{{`}} .Values.ownerChart {{`}}`}} db has a low on cache hit rate on {{`{{`}} $labels.cluster {{`}}`}} for database {{`{{`}} $labels.datname {{`}}`}} with a value of {{`{{`}} $value {{`}}`}}."
