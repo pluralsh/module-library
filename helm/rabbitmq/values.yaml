@@ -1,0 +1,15 @@
+user:
+  # available tags are 'management', 'policymaker', 'monitoring' and 'administrator'
+  tags:
+  - management
+
+permissions:
+  write: ".*"
+  configure: ".*"
+  read: ".*"
+
+vhostName: dummy
+
+cluster:
+  name: rabbitmq
+  namespace: rabbitmq

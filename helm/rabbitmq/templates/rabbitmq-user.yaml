@@ -1,0 +1,12 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: User
+metadata:
+  name: {{ include "rabbitmq.fullname" . }}
+  labels:
+    {{- include "rabbitmq.labels" . | nindent 4 }}
+spec:
+  tags:
+  {{- toYaml .Values.user.tags | nindent 4 }}
+  rabbitmqClusterReference:
+    name: {{ .Values.cluster.name }}
+    namespace: {{ .Values.cluster.namespace }}

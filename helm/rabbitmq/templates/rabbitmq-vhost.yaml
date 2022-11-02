@@ -1,0 +1,11 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: Vhost
+metadata:
+  name: {{ .Values.vhostName }}
+  labels:
+    {{- include "rabbitmq.labels" . | nindent 4 }}
+spec:
+  name: {{ .Values.vhostName }}
+  rabbitmqClusterReference:
+    name: {{ .Values.cluster.name }}
+    namespace: {{ .Values.cluster.namespace }}

@@ -1,0 +1,15 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: Permission
+metadata:
+  name: {{ include "rabbitmq.fullname" . }}
+  labels:
+    {{- include "rabbitmq.labels" . | nindent 4 }}
+spec:
+  vhost: {{ .Values.vhostName }}
+  userReference:
+    name: {{ include "rabbitmq.fullname" . }}
+  permissions:
+    {{- toYaml .Values.permissions | nindent 4 }}
+  rabbitmqClusterReference:
+    name: {{ .Values.cluster.name }}
+    namespace: {{ .Values.cluster.namespace }}
