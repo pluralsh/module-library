@@ -261,6 +261,17 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/postgres-observability-0.1.0/postgres-observability-0.1.0.tgz
     version: 0.1.0
+  rabbitmq:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-11-02T15:32:21.049302589Z"
+    description: A Helm chart for Kubernetes
+    digest: cbf676c0a71ef120d20be23fdf12cfbd68fda730daf5650e53c4474d2707f68e
+    name: rabbitmq
+    type: application
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/rabbitmq-0.1.0/rabbitmq-0.1.0.tgz
+    version: 0.1.0
   test-base:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -328,4 +339,4 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.0/test-base-0.1.0.tgz
     version: 0.1.0
-generated: "2022-10-24T15:15:17.23403507Z"
+generated: "2022-11-02T15:32:21.049454497Z"
