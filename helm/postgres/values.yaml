@@ -18,9 +18,9 @@ extraUsers: []
 # Example extra db definition:
 #
 # extraDBs:
-#   testdb1:
-#     owner: user1
-extraDBs: {}
+#   testdb1: user1
+extraDBs:
+  testdb1: user1
 
 annotations: {}
 
