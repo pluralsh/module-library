@@ -21,10 +21,16 @@ spec:
     {{ .Values.user }}:  # database owner
     - superuser
     - createdb
+    {{- range .Values.extraUsers }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   resources:
   {{- mergeOverwrite .Values.default.resources .Values.resources | toYaml | nindent 4 }}
   databases:
     {{ .Values.user }}: {{ .Values.dbName }}  # dbname: owner
+    {{- range $key, $value := .Values.extraDBs }}
+    {{ $value }}: {{ $key }}
+    {{- end }}
   postgresql:
     version: {{ .Values.version | quote }}
   sidecars:
