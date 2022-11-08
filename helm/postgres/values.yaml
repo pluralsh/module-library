@@ -1,6 +1,16 @@
 ## postgres db metadata
 team: plural
 user: example
+# Example extra user definition:
+#
+# extraUsers:
+# - user1:
+#   - nologin
+# - user2: {}
+#
+# Valid user properties can be found here:
+# https://github.com/zalando/postgres-operator/blob/c895e8f61fc394602bc3151c5b8f00954dcf5d8e/manifests/postgresql.crd.yaml#L559-L587
+extraUsers: []
 dbName: plural
 ownerChart: null
 suffix: ""

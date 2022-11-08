@@ -21,6 +21,9 @@ spec:
     {{ .Values.user }}:  # database owner
     - superuser
     - createdb
+    {{- range .Values.extraUsers }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   resources:
   {{- mergeOverwrite .Values.default.resources .Values.resources | toYaml | nindent 4 }}
   databases:
