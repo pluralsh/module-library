@@ -28,6 +28,9 @@ spec:
   {{- mergeOverwrite .Values.default.resources .Values.resources | toYaml | nindent 4 }}
   databases:
     {{ .Values.user }}: {{ .Values.dbName }}  # dbname: owner
+    {{- range $key, $value := .Values.extraDBs }}
+    {{ $value.owner }}: {{ $key }}
+    {{- end }}
   postgresql:
     version: {{ .Values.version | quote }}
   sidecars:

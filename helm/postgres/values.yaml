@@ -1,6 +1,10 @@
 ## postgres db metadata
 team: plural
 user: example
+dbName: plural
+ownerChart: null
+suffix: ""
+infix: "-postgres"
 # Example extra user definition:
 #
 # extraUsers:
@@ -11,10 +15,12 @@ user: example
 # Valid user properties can be found here:
 # https://github.com/zalando/postgres-operator/blob/c895e8f61fc394602bc3151c5b8f00954dcf5d8e/manifests/postgresql.crd.yaml#L559-L587
 extraUsers: []
-dbName: plural
-ownerChart: null
-suffix: ""
-infix: "-postgres"
+# Example extra db definition:
+#
+# extraDBs:
+#   testdb1:
+#     owner: user1
+extraDBs: {}
 
 annotations: {}
 
