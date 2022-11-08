@@ -19,8 +19,7 @@ extraUsers: []
 #
 # extraDBs:
 #   testdb1: user1
-extraDBs:
-  testdb1: user1
+extraDBs: {}
 
 annotations: {}
 
