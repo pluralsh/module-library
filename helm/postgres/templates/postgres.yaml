@@ -14,6 +14,16 @@ spec:
   clone:
   {{ toYaml .Values.clone | nindent 4 }}
   {{- end }}
+  {{- if .Values.enenableConnectionPooler }}
+  enableConnectionPooler: {{ .Values.enenableConnectionPooler }}
+  {{- end }}
+  {{- if .Values.enableReplicaConnectionPooler }}
+  enableReplicaConnectionPooler: {{ .Values.enableReplicaConnectionPooler }}
+  {{- end }}
+  {{- with .Values.connectionPooler }}
+  connectionPooler:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   volume:
     size: {{ .Values.storage.size }}
   numberOfInstances: {{ .Values.replicas }}

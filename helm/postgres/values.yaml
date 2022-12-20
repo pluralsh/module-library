@@ -27,6 +27,11 @@ version: '13'
 
 clone: null
 
+enableConnectionPooler: false
+enableReplicaConnectionPooler: false
+
+connectionPooler: null
+
 # scaling information
 
 replicas: 1
