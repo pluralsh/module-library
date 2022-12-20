@@ -102,6 +102,16 @@ entries:
   postgres:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-12-20T20:56:39.21608255Z"
+    description: A Helm chart for Kubernetes
+    digest: 5f06d50a6b99ecc4d3633d8352043098d4699dd89276a632acfe2943eb223ac1
+    name: postgres
+    type: application
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/postgres-0.1.15/postgres-0.1.15.tgz
+    version: 0.1.15
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-12-20T14:39:21.556990028Z"
     description: A Helm chart for Kubernetes
     digest: 3a4fc541af33e6af3ebd8b31384ab250317a3fa70f459cbd588f2952d4acc7d3
@@ -359,4 +369,4 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.0/test-base-0.1.0.tgz
     version: 0.1.0
-generated: "2022-12-20T14:39:21.557105029Z"
+generated: "2022-12-20T20:56:39.21631945Z"
