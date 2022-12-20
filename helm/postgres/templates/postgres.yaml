@@ -14,8 +14,8 @@ spec:
   clone:
   {{ toYaml .Values.clone | nindent 4 }}
   {{- end }}
-  {{- if .Values.enenableConnectionPooler }}
-  enableConnectionPooler: {{ .Values.enenableConnectionPooler }}
+  {{- if .Values.enableConnectionPooler }}
+  enableConnectionPooler: {{ .Values.enableConnectionPooler }}
   {{- end }}
   {{- if .Values.enableReplicaConnectionPooler }}
   enableReplicaConnectionPooler: {{ .Values.enableReplicaConnectionPooler }}
