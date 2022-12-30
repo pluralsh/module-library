@@ -43,6 +43,10 @@ spec:
     {{- end }}
   postgresql:
     version: {{ .Values.version | quote }}
+    {{ if .Values.parameters }}
+    parameters:
+    {{ toYaml .Values.parameters | nindent 6 }}
+    {{ end }}
   sidecars:
   - image: {{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}
     name: exporter
