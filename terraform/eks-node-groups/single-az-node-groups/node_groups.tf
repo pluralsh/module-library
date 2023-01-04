@@ -64,6 +64,7 @@ resource "aws_eks_node_group" "workers" {
   }
 
   depends_on = [var.ng_depends_on]
+  force_update_version = true
 }
 
 resource "aws_autoscaling_group_tag" "labels" {
