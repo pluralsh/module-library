@@ -10,3 +10,9 @@ variable "acl" {
 variable "policy_prefix" {
   type = string
 }
+
+variable "force_destroy" {
+  type        = bool
+  default     = false
+  description = "If true, the bucket will be deleted even if it contains objects."
+}

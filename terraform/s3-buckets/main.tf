@@ -2,7 +2,15 @@ resource "aws_s3_bucket" "bucket" {
   for_each      = toset(var.bucket_names)
   bucket        = each.key
   acl           = var.acl
-  force_destroy = true
+  force_destroy = var.force_destroy
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 }
 
 resource "aws_iam_policy" "iam_policy" {
