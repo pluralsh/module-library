@@ -11,5 +11,5 @@ spec:
   promoteTag: {{ .Values.promoteTag }}
   {{- with .Values.steps }}
   steps:
-    {{- toYaml . | nindent 2 }}
+    {{- tpl (toYaml .) $ | nindent 2 }}
   {{- end }}
