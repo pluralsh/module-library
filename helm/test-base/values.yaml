@@ -17,8 +17,8 @@ testName: plural-test
 
 steps:
 - name: watch
-  description: it wait until the `plural` app crd is ready
+  description: it will wait until the {{ .Values.application }} app crd is ready
   template:
     container:
       image: gcr.io/pluralsh/test-base:0.1.6
-      args: ["plural"]
+      args: ["{{ .Values.application }}"]
