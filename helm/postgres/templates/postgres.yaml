@@ -39,7 +39,7 @@ spec:
   databases:
     {{ .Values.dbName }}: {{ .Values.user }}  # dbname: owner
     {{- range $key, $value := .Values.extraDBs }}
-    {{ $value }}: {{ $key }}
+    {{ $key }}: {{ $value }}
     {{- end }}
   postgresql:
     version: {{ .Values.version | quote }}
