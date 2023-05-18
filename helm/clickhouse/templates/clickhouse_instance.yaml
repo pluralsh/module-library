@@ -85,7 +85,6 @@ spec:
     zookeeper:
       nodes:
       {{- if .Values.clickhouseKeeper.enabled }}
-        servers:
         - host: service-{{ template "clickhouse.fullname" . }}-0-0.{{ .Release.Namespace }}.svc.cluster.local
           port: 9181
         - host: service-{{ template "clickhouse.fullname" . }}-0-1.{{ .Release.Namespace }}.svc.cluster.local
