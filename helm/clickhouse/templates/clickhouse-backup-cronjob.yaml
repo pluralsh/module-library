@@ -1,0 +1,112 @@
+{{- if .Values.backup.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "clickhouse.fullname" . }}-backup-cron
+spec:
+  schedule: {{ .Values.backup.backup_schedule | quote }}
+  concurrencyPolicy: "Forbid"
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      completions: 1
+      parallelism: 1
+      template:
+        metadata:
+          labels:
+            job: clickhouse-backup
+        spec:
+          serviceAccountName: {{ include "clickhouse.serviceAccountName" . }}
+          {{- if or .Values.busybox.pullSecrets .Values.backup.image.pullSecrets }}
+          imagePullSecrets:
+            {{- if .Values.busybox.pullSecrets }}
+            {{- range .Values.busybox.pullSecrets }}
+            - name: {{ . }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.backup.image.pullSecrets }}
+            {{- range .Values.backup.image.pullSecrets }}
+            - name: {{ . }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
+
+          initContainers:
+            #
+            # Unfortunately we can't reuse the snippet _snippet-initContainers-wait-for-service-dependencies
+            # as it includes pgbouncer by default.
+            #
+            # TODO: once we'll have a better story for pgbouncer we will likely be able to remove
+            # this code duplication.
+            #
+            - name: wait-for-service-dependencies
+              image: {{ .Values.busybox.image.repository }}:{{ .Values.busybox.image.tag }}
+              imagePullPolicy: {{ .Values.busybox.image.pullPolicy }}
+              env:
+              - name: CLICKHOUSE_HOST
+                value: service-{{ template "clickhouse.fullname" . }}
+              - name: CLICKHOUSE_CLUSTER
+                value: {{ .Values.cluster | quote }}
+              - name: CLICKHOUSE_DATABASE
+                value: {{ .Values.database | quote }}
+              - name: CLICKHOUSE_USER
+                value: {{ .Values.user | quote }}
+              {{- if .Values.existingSecret }}
+              - name: CLICKHOUSE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.existingSecret }}
+                    key: {{ required "The existingSecretPasswordKey needs to be set when using an existingSecret" .Values.existingSecretPasswordKey }}
+              {{- else }}
+              - name: CLICKHOUSE_PASSWORD
+                value: {{ .Values.password | quote }}
+              {{- end }}
+              - name: CLICKHOUSE_SECURE
+                value: {{ .Values.secure | quote }}
+              - name: CLICKHOUSE_VERIFY
+                value: {{ .Values.verify | quote }}
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  until (
+                      wget -qO- \
+                          "http://$CLICKHOUSE_USER:$CLICKHOUSE_PASSWORD@service-{{ template "clickhouse.fullname" . }}.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local:8123" \
+                          --post-data "SELECT count() FROM clusterAllReplicas('{{ .Values.cluster }}', system, one)"
+                  ); do
+                      echo "waiting for ClickHouse cluster to become available"; sleep 1;
+                  done
+          containers:
+            - name: run-backup-cron
+              image: {{ template "client.clickhouse.image" . }}
+              imagePullPolicy: {{ .Values.client.image.pullPolicy }}
+              env:
+                - name: CLICKHOUSE_SERVICES
+                  value: {{ template "clickhouse.shardServices" . }}
+                - name: CLICKHOUSE_PORT
+                  value: "9000"
+                - name: BACKUP_USER
+                  value: {{ .Values.backup.backup_user }}
+                - name: BACKUP_PASSWORD
+                {{- if .Values.backup.existingSecret }}
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.backup.existingSecret }}
+                      key: {{ required "backup.existingSecretPasswordKey is required when using backup.existingSecret" .Values.backup.existingSecretPasswordKey }}
+                {{- else }}
+                  value: {{ .Values.backup.backup_password }}
+                {{- end }}
+              command: ["/bin/sh", "-c", "/scripts/clickhouse_backup.sh"]
+              volumeMounts:
+              - name: clickhouse-backup-script
+                mountPath: /scripts/clickhouse_backup.sh
+                subPath: clickhouse_backup.sh
+
+          volumes:
+          - name: clickhouse-backup-script
+            configMap:
+              name: {{ template "clickhouse.fullname" . }}-backup-script
+              defaultMode: 0777
+
+          restartPolicy: Never
+{{- end }}

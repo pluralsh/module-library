@@ -1,0 +1,82 @@
+apiVersion: platform.plural.sh/v1alpha1
+kind: Runbook
+metadata:
+  name: {{ template "clickhouse.fullname" . }}-scaling
+  labels:
+    platform.plural.sh/pinned: 'true'
+    {{- include "clickhouse.labels" . | nindent 4 }}
+spec:
+  name: {{ include "clickhouse.ownerChart" . | title }} Clickhouse Scaling
+  description: Overview of how to optimally scale your ClickHouse cluster for {{ include "clickhouse.ownerChart" . | title }}
+  display: |-
+{{- .Files.Get "runbooks/clickhouse-scaling.xml" | nindent 4 }}
+  datasources:
+  - name: clickhouse-cpu
+    type: prometheus
+    prometheus:
+      format: cpu
+      legend: $pod
+      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"chi-{{ template "clickhouse.fullname" . }}-{{ .Values.cluster }}-.*"}[5m])) by (pod)
+  - name: clickhouse-memory
+    type: prometheus
+    prometheus:
+      format: memory
+      legend: $pod
+      query: sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"chi-{{ template "clickhouse.fullname" . }}-{{ .Values.cluster }}-.*"}) by (pod)
+  - name: volume
+    type: prometheus
+    prometheus:
+      format: none
+      legend: $persistentvolumeclaim
+      query: (kubelet_volume_stats_capacity_bytes{namespace="{{ .Release.Namespace }}", persistentvolumeclaim=~"data-volumeclaim-template-chi-{{ template "clickhouse.fullname" . }}-{{ .Values.cluster }}-.*"} - kubelet_volume_stats_available_bytes{namespace="{{ .Release.Namespace }}", persistentvolumeclaim=~"data-volumeclaim-template-chi-{{ template "clickhouse.fullname" . }}-{{ .Values.cluster }}-.*"}) / kubelet_volume_stats_capacity_bytes{namespace="{{ .Release.Namespace }}", persistentvolumeclaim=~"data-volumeclaim-template-chi-{{ template "clickhouse.fullname" . }}-{{ .Values.cluster }}-.*"}
+  - name: clickhouse
+    type: kubernetes
+    kubernetes:
+      resource: statefulset
+      name: chi-{{ template "clickhouse.fullname" . }}-{{ .Values.cluster }}-0-0
+  actions:
+  - name: scale
+    action: config
+    redirectTo: '/'
+    configuration:
+      updates:
+      - path: 
+        - {{ template "clickhouse.ownerChart" . }}
+        - {{ .Chart.Name }}
+        - resources
+        - requests
+        - cpu
+        valueFrom: clickhouse-cpu
+      - path:
+        - {{ template "clickhouse.ownerChart" . }}
+        - {{ .Chart.Name }}
+        - resources
+        - requests
+        - memory
+        valueFrom: clickhouse-memory
+      - path: 
+        - {{ template "clickhouse.ownerChart" . }}
+        - {{ .Chart.Name }}
+        - resources
+        - limits
+        - cpu
+        valueFrom: clickhouse-cpu-limit
+      - path:
+        - {{ template "clickhouse.ownerChart" . }}
+        - {{ .Chart.Name }}
+        - resources
+        - limits
+        - memory
+        valueFrom: clickhouse-memory-limit
+      - path:
+        - {{ template "clickhouse.ownerChart" . }}
+        - {{ .Chart.Name }}
+        - persistence
+        - size
+        valueFrom: volume
+      # - path:
+      #   - {{ template "clickhouse.ownerChart" . }}
+      #   - {{ .Chart.Name }}
+      #   - layout
+      #   - shardsCount
+      #   valueFrom: shards

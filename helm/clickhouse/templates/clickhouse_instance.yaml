@@ -1,0 +1,404 @@
+apiVersion: "clickhouse.altinity.com/v1"
+kind: "ClickHouseInstallation"
+metadata:
+  name: {{ template "clickhouse.fullname" . }}
+spec:
+  defaults:
+    templates:
+      serviceTemplate: service-template
+      replicaServiceTemplate: replica-service-template
+  configuration:
+    users:
+      {{- template "clickhouse.passwordValue" . }}
+      {{ .Values.user }}/networks/ip:
+        {{- range $.Values.allowedNetworkIps }}
+        - {{ . | quote }}
+        {{- end }}
+      {{ .Values.user }}/profile: default
+      {{ .Values.user }}/quota: default
+      {{- if .Values.backup.enabled }}
+      {{ .Values.backup.backup_user }}/networks/ip: "0.0.0.0/0"
+      {{ template "clickhouse.backupPasswordValue" . }}
+      {{- end}}
+      {{- if .Values.additionalUsersConfig }}
+      {{- .Values.additionalUsersConfig | toYaml | nindent 6 }}
+      {{- end}}
+    profiles:
+      {{- merge dict .Values.profiles .Values.defaultProfiles | toYaml | nindent 6 }}
+
+    clusters:
+      - name: {{ .Values.cluster | quote }}
+        templates:
+          podTemplate: pod-template
+          clusterServiceTemplate: cluster-service-template
+          {{- if and (.Values.persistence.enabled) (not .Values.persistence.existingClaim) }}
+          dataVolumeClaimTemplate: data-volumeclaim-template
+          {{- end }}
+        layout:
+          shardsCount: {{ .Values.layout.shardsCount }}
+          {{- if and (not .Values.clickhouseKeeper.enabled) (.Values.layout.replicasCount) }}
+          replicasCount: {{ .Values.layout.replicasCount }}
+          {{- else if .Values.clickhouseKeeper.enabled }}
+          replicasCount: 3
+          {{- end }}
+          {{- if or (.Values.clickhouseKeeper.enabled) (.Values.layout.shards) }}
+          shards:
+            {{- if .Values.clickhouseKeeper.enabled }}
+            - files:
+                keeper_config.xml: |
+                  <clickhouse>
+                      <include_from>/tmp/clickhouse-keeper/config.d/generated-keeper-settings.xml</include_from>
+                      <keeper_server incl="keeper_server">
+                          <path>/var/lib/clickhouse-keeper</path>
+                          <tcp_port>9181</tcp_port>
+                          <four_letter_word_white_list>*</four_letter_word_white_list>
+                          <coordination_settings>
+                              <!-- <raft_logs_level>trace</raft_logs_level> -->
+                              <raft_logs_level>information</raft_logs_level>
+                          </coordination_settings>
+                      </keeper_server>
+                  </clickhouse>
+              replicas:
+                - templates:
+                    podTemplate: pod-template-clickhouse-keeper
+                    replicaServiceTemplate: replica-service-template-clickhouse-keeper
+                - templates:
+                    podTemplate: pod-template-clickhouse-keeper
+                    replicaServiceTemplate: replica-service-template-clickhouse-keeper
+                - templates:
+                    podTemplate: pod-template-clickhouse-keeper
+                    replicaServiceTemplate: replica-service-template-clickhouse-keeper
+            {{- end }}
+            {{- if .Values.layout.shards }}
+              {{- toYaml .Values.layout.shards | nindent 12 }}
+            {{- end }}
+          {{- end }}
+
+    settings:
+      {{- merge (dict "default_database" .Values.database) .Values.settings .Values.defaultSettings | toYaml | nindent 6 }}
+
+    {{- with .Values.files }}
+    files:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+
+    zookeeper:
+      nodes:
+      {{- if .Values.clickhouseKeeper.enabled }}
+        servers:
+        - host: service-{{ template "clickhouse.fullname" . }}-0-0.{{ .Release.Namespace }}.svc.cluster.local
+          port: 9181
+        - host: service-{{ template "clickhouse.fullname" . }}-0-1.{{ .Release.Namespace }}.svc.cluster.local
+          port: 9181
+        - host: service-{{ template "clickhouse.fullname" . }}-0-2.{{ .Release.Namespace }}.svc.cluster.local
+          port: 9181
+      {{- else if .Values.externalZookeeper }}
+        {{- toYaml .Values.externalZookeeper.servers | nindent 8 }}
+      {{- end }}
+
+  templates:
+    podTemplates:
+      - name: pod-template
+          {{- if .Values.podAnnotations }}
+        metadata:
+          annotations: {{ toYaml .Values.podAnnotations | nindent 12 }}
+          {{- end }}
+        {{- if .Values.podDistribution }}
+        podDistribution: {{ toYaml .Values.podDistribution | nindent 12 }}
+        {{- end}}
+        spec:
+          {{- if .Values.affinity }}
+          affinity: {{ toYaml .Values.affinity | nindent 12 }}
+          {{- end }}
+          {{- if .Values.tolerations }}
+          tolerations: {{ toYaml .Values.tolerations | nindent 12 }}
+          {{- end }}
+          {{- if .Values.nodeSelector }}
+          nodeSelector: {{ toYaml .Values.nodeSelector | nindent 12 }}
+          {{- end }}
+          {{- if or (.Values.topologySpreadConstraints) (.Values.defaultTopologySpreadConstraints.enabled) }}
+          topologySpreadConstraints:
+          {{- if .Values.defaultTopologySpreadConstraints.enabled }}
+            - maxSkew: 1
+              topologyKey: topology.kubernetes.io/zone
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchExpressions:
+                - key: clickhouse.altinity.com/chi
+                  operator: In
+                  values:
+                  - {{ template "clickhouse.fullname" . }}
+          {{- end }}
+          {{- if .Values.topologySpreadConstraints }}
+            {{ toYaml .Values.topologySpreadConstraints | nindent 12 }}
+          {{- end }}
+          {{- end }}
+
+          {{- if .Values.securityContext.enabled }}
+          securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "clickhouse.serviceAccountName" . }}
+          {{- if .Values.image.pullSecrets }}
+          imagePullSecrets:
+            {{- range .Values.image.pullSecrets }}
+            - name: {{ . }}
+            {{- end }}
+          {{- end }}
+
+          containers:
+            - name: clickhouse
+              image: {{ template "clickhouse.image" . }}
+              env:
+              command:
+                - /bin/bash
+                - -c
+                - /usr/bin/clickhouse-server --config-file=/etc/clickhouse-server/config.xml
+              ports:
+                - name: http
+                  containerPort: 8123
+                - name: client
+                  containerPort: 9000
+                - name: interserver
+                  containerPort: 9009
+              {{- if .Values.persistence.enabled }}
+              volumeMounts:
+              {{- if .Values.persistence.existingClaim }}
+                - name: existing-volumeclaim
+              {{- else }}
+                - name: data-volumeclaim-template
+              {{- end }}
+                  mountPath: /var/lib/clickhouse
+              {{- end }}
+
+              {{- if .Values.resources }}
+              resources: {{ toYaml .Values.resources | nindent 16 }}
+              {{- end }}
+            {{- if .Values.backup.enabled }}
+            - name: clickhouse-backup
+              image: {{ template "backup.clickhouse.image" . }}
+              imagePullPolicy: {{ .Values.backup.image.pullPolicy }}
+              command:
+                - /bin/bash
+                - -c
+                - /bin/clickhouse-backup server
+              {{- with .Values.backup.env }}
+              env:
+                {{- toYaml . | nindent 16 }}
+              {{- end}}
+              ports:
+                - name: backup-rest
+                  containerPort: 7171
+            {{- end }}
+      {{- if .Values.clickhouseKeeper.enabled }}
+      - name: pod-template-clickhouse-keeper
+          {{- if .Values.podAnnotations }}
+        metadata:
+          annotations: {{ toYaml .Values.podAnnotations | nindent 12 }}
+          {{- end }}
+        {{- if .Values.podDistribution }}
+        podDistribution: {{ toYaml .Values.podDistribution | nindent 12 }}
+        {{- end}}
+        spec:
+          {{- if .Values.affinity }}
+          affinity: {{ toYaml .Values.affinity | nindent 12 }}
+          {{- end }}
+          {{- if .Values.tolerations }}
+          tolerations: {{ toYaml .Values.tolerations | nindent 12 }}
+          {{- end }}
+          {{- if .Values.nodeSelector }}
+          nodeSelector: {{ toYaml .Values.nodeSelector | nindent 12 }}
+          {{- end }}
+          {{- if or (.Values.topologySpreadConstraints) (.Values.defaultTopologySpreadConstraints.enabled) }}
+          topologySpreadConstraints:
+          {{- if .Values.defaultTopologySpreadConstraints.enabled }}
+            - maxSkew: 1
+              topologyKey: topology.kubernetes.io/zone
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchExpressions:
+                - key: clickhouse.altinity.com/chi
+                  operator: In
+                  values:
+                  - {{ template "clickhouse.fullname" . }}
+          {{- end }}
+          {{- if .Values.topologySpreadConstraints }}
+            {{ toYaml .Values.topologySpreadConstraints | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          serviceAccountName: {{ include "clickhouse.serviceAccountName" . }}
+          {{- if .Values.securityContext.enabled }}
+          securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+
+          {{- if .Values.image.pullSecrets }}
+          imagePullSecrets:
+            {{- range .Values.image.pullSecrets }}
+            - name: {{ . }}
+            {{- end }}
+          {{- end }}
+
+          containers:
+            - name: clickhouse
+              image: {{ template "clickhouse.image" . }}
+              env:
+              - name: KEEPER_SERVERS
+                value: {{ .Values.layout.replicasCount | quote }}
+              - name: RAFT_PORT
+                value: "9444"
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  HOST=`hostname -s` &&
+                  DOMAIN=`hostname -d` &&
+                  if [[ $HOST =~ (.*)-([0-9]+)-([0-9]+)$ ]]; then
+                      NAME=${BASH_REMATCH[1]}
+                      ORD=${BASH_REMATCH[2]}
+                      SUFFIX=${BASH_REMATCH[3]}
+                  else
+                      echo "Failed to parse name and ordinal of Pod"
+                      exit 1
+                  fi &&
+                  if [[ $DOMAIN =~ (.*)-([0-9]+)(.{{ .Release.Namespace }}.svc.cluster.local)$ ]]; then
+                      DOMAIN_NAME=${BASH_REMATCH[1]}
+                      DOMAIN_ORD=${BASH_REMATCH[2]}
+                      DOMAIN_SUFFIX=${BASH_REMATCH[3]}
+                  else
+                      echo "Failed to parse name and ordinal of Pod"
+                      exit 1
+                  fi &&
+                  export MY_ID=$((ORD+1)) &&
+                  mkdir -p /tmp/clickhouse-keeper/config.d/ &&
+                  {
+                    echo "<yandex><keeper_server>"
+                    echo "<server_id>${MY_ID}</server_id>"
+                    echo "<raft_configuration>"
+                    for (( i=1; i<=$KEEPER_SERVERS; i++ )); do
+                        echo "<server><id>${i}</id><hostname>$NAME-$((i-1))-${SUFFIX}.${DOMAIN_NAME}-$((i-1))${DOMAIN_SUFFIX}</hostname><port>${RAFT_PORT}</port></server>"
+                    done
+                    echo "</raft_configuration>"
+                    echo "</keeper_server></yandex>"
+                  } > /tmp/clickhouse-keeper/config.d/generated-keeper-settings.xml &&
+                  cat /tmp/clickhouse-keeper/config.d/generated-keeper-settings.xml &&
+                  /usr/bin/clickhouse-server --config-file=/etc/clickhouse-server/config.xml
+
+              ports:
+                - name: http
+                  containerPort: 8123
+                - name: client
+                  containerPort: 9000
+                - name: interserver
+                  containerPort: 9009
+                - name: raft
+                  containerPort: 9444
+                - name: ch-keeper
+                  containerPort: 9181
+              {{- if .Values.persistence.enabled }}
+              volumeMounts:
+              {{- if .Values.persistence.existingClaim }}
+                - name: existing-volumeclaim
+              {{- else }}
+                - name: data-volumeclaim-template
+              {{- end }}
+                  mountPath: /var/lib/clickhouse
+              {{- end }}
+              # configures probes for clickhouse keeper
+              # without this, traffic is not sent through the service and clickhouse keeper cannot start
+              readinessProbe:
+                tcpSocket:
+                  port: 9444
+                initialDelaySeconds: 10
+                timeoutSeconds: 5
+                periodSeconds: 10
+                failureThreshold: 3
+              livenessProbe:
+                tcpSocket:
+                  port: 9181
+                initialDelaySeconds: 30
+                timeoutSeconds: 5
+                periodSeconds: 10
+
+              {{- if .Values.resources }}
+              resources: {{ toYaml .Values.resources | nindent 16 }}
+              {{- end }}
+            {{- if .Values.backup.enabled }}
+            - name: clickhouse-backup
+              image: {{ template "backup.clickhouse.image" . }}
+              imagePullPolicy: {{ .Values.backup.image.pullPolicy }}
+              command:
+                - /bin/bash
+                - -c
+                - /bin/clickhouse-backup server
+              {{- with .Values.backup.env }}
+              env:
+                {{- toYaml . | nindent 16 }}
+              {{- end}}
+              ports:
+                - name: backup-rest
+                  containerPort: 7171
+            {{- end }}
+      {{- end }}
+    serviceTemplates:
+      - name: service-template
+        generateName: service-{chi}
+        spec:
+          ports:
+            - name: http
+              port: 8123
+            - name: tcp
+              port: 9000
+            - name: clickhouse-keeper
+              port: 9181
+          type: {{ .Values.serviceType }}
+      - name: cluster-service-template
+        generateName: service-{chi}-{cluster}
+        spec:
+          ports:
+            - name: http
+              port: 8123
+            - name: tcp
+              port: 9000
+          type: ClusterIP
+          clusterIP: None
+      - name: replica-service-template
+        generateName: service-{chi}-{shard}-{replica}
+        spec:
+          ports:
+            - name: http
+              port: 8123
+            - name: tcp
+              port: 9000
+            - name: interserver
+              port: 9009
+          type: ClusterIP
+      {{- if .Values.clickhouseKeeper.enabled }}
+      - name: replica-service-template-clickhouse-keeper
+        generateName: service-{chi}-{shard}-{replica}
+        spec:
+          ports:
+            - name: http
+              port: 8123
+            - name: tcp
+              port: 9000
+            - name: interserver
+              port: 9009
+            - name: clickhouse-keeper
+              port: 9181
+            - name: raft
+              port: 9444
+          type: ClusterIP
+      {{- end }}
+
+    {{- if and (.Values.persistence.enabled) (not .Values.persistence.existingClaim) }}
+    volumeClaimTemplates:
+      - name: data-volumeclaim-template
+        spec:
+          {{- if .Values.persistence.storageClass }}
+          storageClassName: {{ .Values.persistence.storageClass }}
+          {{- end }}
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: {{ .Values.persistence.size | quote }}
+    {{- end }}
