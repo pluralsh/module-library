@@ -112,18 +112,18 @@ defaultProfiles:
 ## See https://github.com/Altinity/clickhouse-operator/blob/master/docs/custom_resource_explained.md#specconfigurationfiles
 files:
   # TODO: check if we actually need this file by default
-  events.proto: |
-    syntax = "proto3";
-    message Event {
-      string uuid = 1;
-      string event = 2;
-      string properties = 3;
-      string timestamp = 4;
-      uint64 team_id = 5;
-      string distinct_id = 6;
-      string created_at = 7;
-      string elements_chain = 8;
-    }
+  # events.proto: |
+  #   syntax = "proto3";
+  #   message Event {
+  #     string uuid = 1;
+  #     string event = 2;
+  #     string properties = 3;
+  #     string timestamp = 4;
+  #     uint64 team_id = 5;
+  #     string distinct_id = 6;
+  #     string created_at = 7;
+  #     string elements_chain = 8;
+  #   }
 
 
 ## -- Clickhouse cluster layout. (Experimental, use at own risk)
@@ -293,3 +293,6 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+
+pluralRunbook:
+  enabled: true
