@@ -52,6 +52,7 @@ mysql://
 {{- else -}}
 {{- printf "%s-db" (include "mysql-cluster.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+{{- end -}}
 
 {{- define "mysql-cluster.secretName" -}}
 {{- printf "%s-db" (include "mysql-cluster.fullname" .) | trunc 63 | trimSuffix "-" -}}

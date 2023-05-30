@@ -16,8 +16,8 @@ spec:
   secretName: {{ include "mysql-cluster.secretName" . }}
   {{- end }}
 
-  {{- if .Values.image }}
-  image: {{ .Values.image }}
+  {{- if .Values.image.repository }}
+  image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
   {{- end }}
 
   {{- if .Values.mysqlVersion }}
