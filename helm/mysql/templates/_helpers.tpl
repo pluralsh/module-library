@@ -61,3 +61,34 @@ mysql://
 {{- define "mysql-cluster.backupSecretName" -}}
 {{- printf "%s-db-backup" (include "mysql-cluster.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "mysql-cluster.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "mysql-cluster.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "mysql-cluster.labels" -}}
+helm.sh/chart: {{ include "mysql-cluster.chart" . }}
+{{ include "mysql-cluster.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "mysql-cluster.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "mysql-cluster.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
