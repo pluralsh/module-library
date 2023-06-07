@@ -9,9 +9,9 @@ metadata:
 spec:
   repository: {{ .Values.application }}
   promoteTag: {{ .Values.promoteTag }}
-  {{- with .Values.additionalTags }}
-  additionalTags:
-  {{ toYaml .Values.additionalTags | nindent 2 }}
+  {{- with .Values.tags }}
+  tags:
+  {{ toYaml .Values.tags | nindent 2 }}
   {{- end }}
   steps:
   {{- tpl (toYaml .Values.steps) . |  nindent 2 }}
