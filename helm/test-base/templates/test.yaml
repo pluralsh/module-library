@@ -11,7 +11,7 @@ spec:
   promoteTag: {{ .Values.promoteTag }}
   {{- with .Values.tags }}
   tags:
-  {{ toYaml .Values.tags | nindent 2 }}
+  {{ toYaml . | nindent 2 }}
   {{- end }}
   steps:
   {{- tpl (toYaml .Values.steps) . |  nindent 2 }}
