@@ -20,5 +20,6 @@ steps:
   description: it wait until the app crd is ready
   template:
     container:
+      name: watch
       image: gcr.io/pluralsh/test-base:0.1.6
       args: ["{{ .Values.repository }}"]
