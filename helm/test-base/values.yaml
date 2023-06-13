@@ -22,4 +22,4 @@ steps:
     container:
       name: watch
       image: gcr.io/pluralsh/test-base:0.1.6
-      args: ["{{ .Values.repository }}"]
+      args: ["{{ .Values.application }}"]
