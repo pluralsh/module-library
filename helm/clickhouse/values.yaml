@@ -296,3 +296,6 @@ serviceAccount:
 
 pluralRunbook:
   enabled: true
+
+pre-delete-installation:
+  enabled: true
