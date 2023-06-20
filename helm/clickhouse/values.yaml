@@ -297,7 +297,7 @@ serviceAccount:
 pluralRunbook:
   enabled: true
 
-pre-delete-installation:
+preDeleteInstallationHook:
   image:
     repository: bitnami/kubectl
     tag: 1.25.8

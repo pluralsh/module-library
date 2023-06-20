@@ -1,4 +1,4 @@
-{{- if .Values.pre-delete-installation.enabled }}
+{{- if .Values.preDeleteInstallationHook.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: delete-clickhouse-installation
-        image: {{ .Values.pre-delete-installation.image.repository }}:{{ .Values.pre-delete-installation.image.tag }}
+        image: {{ .Values.preDeleteInstallationHook.image.repository }}:{{ .Values.preDeleteInstallationHook.image.tag }}
         args:
         - delete
         - clickhouseinstallation
