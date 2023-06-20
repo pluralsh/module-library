@@ -298,5 +298,7 @@ pluralRunbook:
   enabled: true
 
 pre-delete-installation:
-  image: bitnami/kubectl:1.25.8
+  image:
+    repository: bitnami/kubectl
+    tag: 1.25.8
   enabled: true
