@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: delete-clickhouse-installation
-        image: bitnami/kubectl:1.25.8
+        image: {{ .Values.pre-delete-installation.image }}
         args:
         - delete
         - clickhouseinstallation
