@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "your-chart.fullname" . }}-pre-delete-job
+  name: {{ include "clickhouse.fullname" . }}-pre-delete-job
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
