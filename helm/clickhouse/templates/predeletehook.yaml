@@ -20,7 +20,7 @@ spec:
         - --namespace
         - {{ .Release.Namespace }}
       restartPolicy: Never
-      serviceAccountName: {{ include "clickhouse.fullname" . }}--job
+      serviceAccountName: {{ include "clickhouse.fullname" . }}-pre-delete-job
   backoffLimit: 4
 ---
 kind: ServiceAccount
