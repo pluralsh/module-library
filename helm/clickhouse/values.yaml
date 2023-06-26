@@ -30,7 +30,6 @@ clickhouseKeeper:
   enabled: true
   serviceTemplate:
     type: ClusterIP
-    clusterIP: None
 
 image:
   # -- ClickHouse image repository.

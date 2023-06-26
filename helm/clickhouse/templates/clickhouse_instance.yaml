@@ -385,7 +385,9 @@ spec:
               port: 9181
             - name: raft
               port: 9444
+          {{- if .Values.clickhouseKeeper.serviceTemplate.clusterIP }}
           clusterIP: {{ .Values.clickhouseKeeper.serviceTemplate.clusterIP }}
+          {{- end }}
           type: {{ .Values.clickhouseKeeper.serviceTemplate.type }}
       {{- end }}
 
