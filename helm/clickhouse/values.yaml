@@ -28,6 +28,9 @@ externalZookeeper:
 # -- Enabled the built-in ClickHouse Keeper. This is an experimental feature and should be used with caution. Migrating from ClickHouseKeeper to Zookeeper is not supported.
 clickhouseKeeper:
   enabled: true
+  serviceTemplate:
+    type: ClusterIP
+    clusterIP: None
 
 image:
   # -- ClickHouse image repository.
