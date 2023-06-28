@@ -304,3 +304,26 @@ preDeleteInstallationHook:
     repository: bitnami/kubectl
     tag: 1.25.8
   enabled: true
+
+postInstallationHook:
+  enabled: true
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    helm.sh/hook-weight: 0
+  image:
+    repository: curlimages/curl
+    tag: 7.79.1
+  command: ["sh", "-c"]
+  args:
+    - curl -sS "${CLICKHOUSE_HOST}/?user=${CLICKHOUSE_USER}&password=${CLICKHOUSE_PASSWORD}" -d "SELECT * FROM information_schema.tables where table_schema = '{{ .Values.database }}'"
+  envFrom: []
+  env:
+    - name: CLICKHOUSE_HOST
+      value: service-{{ include "clickhouse.fullname" . }}-{{ .Values.cluster }}.{{ .Release.namespace }}.svc.cluster.local:8123
+    - name: CLICKHOUSE_PASSWORD
+      value: "{{ .Values.password }}"
+    - name: CLICKHOUSE_USER
+      value: "{{ .Values.user }}"
+  role:
+    rules: []
