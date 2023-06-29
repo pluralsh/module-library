@@ -12,9 +12,12 @@ spec:
       initContainers:
         - name: {{ .Values.postInstallationHook.name }}-wait-chi-complete
           image: "{{ .Values.postInstallationHook.initContainer.image.repository }}:{{ .Values.postInstallationHook.initContainer.image.tag }}"
+          command: ["/bin/sh", "-c"]
           args:
+            - kubectl
+            - -v=2
             - wait
-            - --for=jsonpath='{.status.status}'=Completed
+            - --for=jsonpath=".status.status"=Completed
             - --timeout=30s
             - --namespace
             - {{ .Release.Namespace }}
