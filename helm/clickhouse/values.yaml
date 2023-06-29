@@ -334,6 +334,6 @@ postInstallationHook:
   backoffLimit: 6
   role:
     rules:
-      - apiGroups: ["clickhouse.altinity.com/v1"]
+      - apiGroups: ["clickhouse.altinity.com"]
         resources: ["clickhouseinstallations"]
         verbs: ["delete","deletecollection","get","list","patch","create","update","watch"]
