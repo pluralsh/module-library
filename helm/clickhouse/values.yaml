@@ -314,6 +314,7 @@ postInstallationHook:
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
     helm.sh/hook-weight: "0"
   initContainer:
+    timeout: "60s"
     image:
       repository: bitnami/kubectl
       tag: 1.25.8
