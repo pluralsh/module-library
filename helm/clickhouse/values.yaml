@@ -307,17 +307,22 @@ preDeleteInstallationHook:
   enabled: true
 
 postInstallationHook:
+  name: ch-cluster-ready
   enabled: true
   annotations:
     helm.sh/hook: post-install
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-    helm.sh/hook-weight: 0
+    helm.sh/hook-weight: "0"
+  initContainer:
+    image:
+      repository: bitnami/kubectl
+      tag: 1.25.8
   image:
     repository: curlimages/curl
     tag: 7.79.1
   command: ["sh", "-c"]
   args:
-    - curl -sS "${CLICKHOUSE_HOST}/?user=${CLICKHOUSE_USER}&password=${CLICKHOUSE_PASSWORD}" -d "SELECT * FROM information_schema.tables where table_schema = '{{ .Values.database }}'"
+    - curl -sS "${CLICKHOUSE_HOST}/?user=${CLICKHOUSE_USER}&password=${CLICKHOUSE_PASSWORD}" -d "SELECT * FROM information_schema.tables where table_schema = '{{ .Values.database }}'" && sleep 30
   envFrom: []
   env:
     - name: CLICKHOUSE_HOST
@@ -326,5 +331,9 @@ postInstallationHook:
       value: "{{ .Values.password }}"
     - name: CLICKHOUSE_USER
       value: "{{ .Values.user }}"
+  backoffLimit: 6
   role:
-    rules: []
+    rules:
+      - apiGroups: ["clickhouse.altinity.com/v1"]
+        resources: ["clickhouseinstallations"]
+        verbs: ["delete","deletecollection","get","list","patch","create","update","watch"]
