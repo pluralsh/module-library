@@ -12,7 +12,6 @@ spec:
       initContainers:
         - name: {{ .Values.postInstallationHook.name }}-wait-chi-complete
           image: "{{ .Values.postInstallationHook.initContainer.image.repository }}:{{ .Values.postInstallationHook.initContainer.image.tag }}"
-          command: ["sh", "-c"]
           args:
             - wait
             - --for=jsonpath='{.status.status}'=Completed
