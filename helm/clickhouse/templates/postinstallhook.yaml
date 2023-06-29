@@ -14,14 +14,8 @@ spec:
           image: "{{ .Values.postInstallationHook.initContainer.image.repository }}:{{ .Values.postInstallationHook.initContainer.image.tag }}"
           command: ["/bin/sh", "-c"]
           args:
-            - kubectl
-            - -v=2
-            - wait
-            - --for=jsonpath=".status.status"=Completed
-            - --timeout=30s
-            - --namespace
-            - {{ .Release.Namespace }}
-            - ClickHouseInstallation/{{ include "clickhouse.fullname" . }}
+            - | 
+              kubectl wait --for=jsonpath=".status.status"=Completed --timeout={{ .Values.postInstallationHook.initContainer.timeout }} --namespace {{ .Release.Namespace }} ClickHouseInstallation/{{ include "clickhouse.fullname" . }}
           imagePullPolicy: IfNotPresent
       containers:
         - name: {{ .Values.postInstallationHook.name }}
