@@ -303,7 +303,7 @@ pluralRunbook:
 preDeleteInstallationHook:
   image:
     repository: bitnami/kubectl
-    tag: 1.25.8
+    tag: 1.27.3
   enabled: true
 
 postInstallationHook:
@@ -317,7 +317,7 @@ postInstallationHook:
     timeout: "180s"
     image:
       repository: bitnami/kubectl
-      tag: 1.25.8
+      tag: 1.27.3
   image:
     repository: curlimages/curl
     tag: 7.79.1
