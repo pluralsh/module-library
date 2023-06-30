@@ -314,7 +314,7 @@ postInstallationHook:
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
     helm.sh/hook-weight: "0"
   initContainer:
-    timeout: "60s"
+    timeout: "180s"
     image:
       repository: bitnami/kubectl
       tag: 1.25.8
@@ -322,8 +322,7 @@ postInstallationHook:
     repository: curlimages/curl
     tag: 7.79.1
   command: ["sh", "-c"]
-  args:
-    - curl -sS "${CLICKHOUSE_HOST}/?user=${CLICKHOUSE_USER}&password=${CLICKHOUSE_PASSWORD}" -d "SELECT * FROM information_schema.tables where table_schema = '{{ .Values.database }}'" && sleep 30
+  args: []
   envFrom: []
   env:
     - name: CLICKHOUSE_HOST
