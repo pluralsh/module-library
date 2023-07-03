@@ -4,3 +4,5 @@ description: A Helm chart that installs a ClickHouse cluster using the ClickHous
 type: application
 version: 0.2.3
 appVersion: "22.8.11.15"
+maintainers:
+  - name: Plural
