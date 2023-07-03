@@ -337,4 +337,4 @@ postInstallationHook:
     rules:
       - apiGroups: ["clickhouse.altinity.com"]
         resources: ["clickhouseinstallations"]
-        verbs: ["delete","deletecollection","get","list","patch","create","update","watch"]
+        verbs: ["delete", "deletecollection", "get", "list", "patch", "create", "update", "watch"]
