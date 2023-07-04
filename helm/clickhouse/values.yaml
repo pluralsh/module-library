@@ -28,9 +28,6 @@ externalZookeeper:
 # -- Enabled the built-in ClickHouse Keeper. This is an experimental feature and should be used with caution. Migrating from ClickHouseKeeper to Zookeeper is not supported.
 clickhouseKeeper:
   enabled: true
-  serviceTemplate:
-    type: ClusterIP
-    clusterIP: None
 
 image:
   # -- ClickHouse image repository.
@@ -241,7 +238,7 @@ backup:
     # -- Clickhouse backup image repository.
     repository: dkr.plural.sh/clickhouse/altinity/clickhouse-backup
     # -- ClickHouse backup image tag.
-    tag: "1.5.0"
+    tag: "2.3.0"
     # -- Image pull policy
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
