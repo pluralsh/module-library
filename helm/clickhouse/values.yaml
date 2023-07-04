@@ -327,7 +327,7 @@ postInstallationHook:
   envFrom: []
   env:
     - name: CLICKHOUSE_HOST
-      value: service-{{ include "clickhouse.fullname" . }}-{{ .Values.cluster }}.{{ .Release.namespace }}.svc.cluster.local:8123
+      value: service-{{ include "clickhouse.fullname" . }}-{{ .Values.cluster }}.{{ .Release.Namespace }}.svc.cluster.local:8123
     - name: CLICKHOUSE_PASSWORD
       value: "{{ .Values.password }}"
     - name: CLICKHOUSE_USER
