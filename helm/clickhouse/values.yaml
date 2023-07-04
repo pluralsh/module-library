@@ -219,7 +219,7 @@ client:
     # -- ClickHouse image repository.
     repository: dkr.plural.sh/clickhouse/clickhouse/clickhouse-server
     # -- ClickHouse image tag.
-    tag: "23.6.1.1524"
+    tag: "22.8.11.15"
     # -- Image pull policy
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
