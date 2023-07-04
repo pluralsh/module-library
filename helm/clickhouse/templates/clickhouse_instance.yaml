@@ -380,6 +380,7 @@ spec:
             - name: raft
               port: 9444
           type: ClusterIP
+      {{- end }}
 
     {{- if and (.Values.persistence.enabled) (not .Values.persistence.existingClaim) }}
     volumeClaimTemplates:
