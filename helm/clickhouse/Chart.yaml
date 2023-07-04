@@ -2,7 +2,7 @@ apiVersion: v2
 name: clickhouse
 description: A Helm chart that installs a ClickHouse cluster using the ClickHouse Operator
 type: application
-version: 0.2.3
+version: 0.2.4
 appVersion: "22.8.11.15"
 maintainers:
   - name: Plural
