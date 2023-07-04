@@ -3,6 +3,19 @@ entries:
   clickhouse:
   - apiVersion: v2
     appVersion: 22.8.11.15
+    created: "2023-07-04T14:45:13.585258902Z"
+    description: A Helm chart that installs a ClickHouse cluster using the ClickHouse
+      Operator
+    digest: 99804d8a75810765b197931532aa88f57ce95ddbdb2d4dd187eaec9fd55b1683
+    maintainers:
+    - name: Plural
+    name: clickhouse
+    type: application
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/clickhouse-0.2.4/clickhouse-0.2.4.tgz
+    version: 0.2.4
+  - apiVersion: v2
+    appVersion: 22.8.11.15
     created: "2023-07-04T12:44:02.497291726Z"
     description: A Helm chart that installs a ClickHouse cluster using the ClickHouse
       Operator
@@ -581,4 +594,4 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.0/test-base-0.1.0.tgz
     version: 0.1.0
-generated: "2023-07-04T12:44:02.497733141Z"
+generated: "2023-07-04T14:45:13.585374803Z"
