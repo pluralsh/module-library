@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "clickhouse.name" . }}-clickhouse-backup-script
+  name: {{ template "clickhouse.fullname" . }}-backup-script
 data:
 {{ (.Files.Glob "scripts/clickhouse_backup.sh").AsConfig | indent 2 }}
 {{- end }}
