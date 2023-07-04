@@ -1,0 +1,62 @@
+{{- if .Values.postInstallationHook.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-post-install-ready-job
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.postInstallationHook.annotations "context" $ ) | nindent 4 }}
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ include "clickhouse.fullname" . }}-post-install-ready-job
+      initContainers:
+        - name: {{ .Values.postInstallationHook.name }}-wait-chi-complete
+          image: "{{ .Values.postInstallationHook.initContainer.image.repository }}:{{ .Values.postInstallationHook.initContainer.image.tag }}"
+          command: ["/bin/sh", "-c"]
+          args:
+            - | 
+              kubectl wait --for=jsonpath=".status.status"=Completed --timeout={{ .Values.postInstallationHook.initContainer.timeout }} --namespace {{ .Release.Namespace }} ClickHouseInstallation/{{ include "clickhouse.fullname" . }}
+          imagePullPolicy: IfNotPresent
+      containers:
+        - name: {{ .Values.postInstallationHook.name }}
+          image: "{{ .Values.postInstallationHook.image.repository }}:{{ .Values.postInstallationHook.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.postInstallationHook.command "context" $ ) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" ( dict "value" .Values.postInstallationHook.args "context" $ ) | nindent 12 }}
+            {{- if .Values.postInstallationHook.env }}
+          env:
+            {{- include "common.tplvalues.render" ( dict "value" .Values.postInstallationHook.env "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.postInstallationHook.envFrom }}
+          envFrom:
+            {{- include "common.tplvalues.render" ( dict "value" .Values.postInstallationHook.envFrom "context" $) | nindent 12 }}
+            {{- end }}
+  backoffLimit: {{ .Values.postInstallationHook.backoffLimit }}
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-post-install-ready-job
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.postInstallationHook.annotations "context" $ ) | nindent 4 }}
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-post-install-ready-job
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.postInstallationHook.annotations "context" $ ) | nindent 4 }}
+rules: {{- include "common.tplvalues.render" (dict "value" .Values.postInstallationHook.role.rules "context" $ ) | nindent 2 }}
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "clickhouse.fullname" . }}-post-install-ready-job
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.postInstallationHook.annotations "context" $ ) | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "clickhouse.fullname" . }}-post-install-ready-job
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ include "clickhouse.fullname" . }}-post-install-ready-job
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

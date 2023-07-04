@@ -238,7 +238,7 @@ backup:
     # -- Clickhouse backup image repository.
     repository: dkr.plural.sh/clickhouse/altinity/clickhouse-backup
     # -- ClickHouse backup image tag.
-    tag: "1.5.0"
+    tag: "2.3.0"
     # -- Image pull policy
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -300,5 +300,38 @@ pluralRunbook:
 preDeleteInstallationHook:
   image:
     repository: bitnami/kubectl
-    tag: 1.25.8
+    tag: 1.27.3
   enabled: true
+
+postInstallationHook:
+  name: ch-cluster-ready
+  enabled: true
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    helm.sh/hook-weight: "0"
+  initContainer:
+    timeout: "180s"
+    image:
+      repository: bitnami/kubectl
+      tag: 1.27.3
+  image:
+    repository: curlimages/curl
+    tag: 7.79.1
+  command: ["sh", "-c"]
+  args:
+    - curl -Sv "${CLICKHOUSE_HOST}/?user=${CLICKHOUSE_USER}&password=${CLICKHOUSE_PASSWORD}" -d "SELECT 1" && sleep 10
+  envFrom: []
+  env:
+    - name: CLICKHOUSE_HOST
+      value: service-{{ include "clickhouse.fullname" . }}-{{ .Values.cluster }}.{{ .Release.Namespace }}.svc.cluster.local:8123
+    - name: CLICKHOUSE_PASSWORD
+      value: "{{ .Values.password }}"
+    - name: CLICKHOUSE_USER
+      value: "{{ .Values.user }}"
+  backoffLimit: 6
+  role:
+    rules:
+      - apiGroups: ["clickhouse.altinity.com"]
+        resources: ["clickhouseinstallations"]
+        verbs: ["delete", "deletecollection", "get", "list", "patch", "create", "update", "watch"]

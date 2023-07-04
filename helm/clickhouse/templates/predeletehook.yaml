@@ -19,6 +19,8 @@ spec:
         - {{ template "clickhouse.fullname" . }}
         - --namespace
         - {{ .Release.Namespace }}
+        - --wait
+        - --timeout=600s
       restartPolicy: Never
       serviceAccountName: {{ include "clickhouse.fullname" . }}-pre-delete-job
   backoffLimit: 4
@@ -41,9 +43,9 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
     helm.sh/hook-weight: "1"
 rules:
-- apiGroups: ["clickhouse.altinity.com/v1"]
+- apiGroups: ["clickhouse.altinity.com"]
   resources: ["clickhouseinstallations"]
-  verbs: ["get", "list", "delete"]
+  verbs: ["delete", "deletecollection", "get", "list", "patch", "create", "update", "watch"]
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1

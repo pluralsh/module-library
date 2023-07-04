@@ -273,7 +273,7 @@ spec:
                     echo "<server_id>${MY_ID}</server_id>"
                     echo "<raft_configuration>"
                     for (( i=1; i<=$KEEPER_SERVERS; i++ )); do
-                        echo "<server><id>${i}</id><hostname>$NAME-$((i-1))-${SUFFIX}.${DOMAIN_NAME}-$((i-1))${DOMAIN_SUFFIX}</hostname><port>${RAFT_PORT}</port></server>"
+                        echo "<server><id>${i}</id><hostname>${DOMAIN_NAME}-$((i-1))${DOMAIN_SUFFIX}</hostname><port>${RAFT_PORT}</port></server>"
                     done
                     echo "</raft_configuration>"
                     echo "</keeper_server></yandex>"
@@ -310,12 +310,6 @@ spec:
                 timeoutSeconds: 5
                 periodSeconds: 10
                 failureThreshold: 3
-              livenessProbe:
-                tcpSocket:
-                  port: 9181
-                initialDelaySeconds: 30
-                timeoutSeconds: 5
-                periodSeconds: 10
 
               {{- if .Values.resources }}
               resources: {{ toYaml .Values.resources | nindent 16 }}
