@@ -75,11 +75,13 @@ spec:
         valueFrom: {{ $name }}-memory-limit
       {{- end }}
   display: |-
+    <box pad='small' gap='medium' direction='row' align='center'>
+      <button label='Scale' action='scale' primary='true' headline='true' />
+    </box>
     {{- range $componentKey, $componentValue := .Values.components }}
     {{- $name := $componentKey }}
     <root gap='medium'>
       <box pad='small' gap='medium' direction='row' align='center'>
-        <button label='Scale' action='scale' primary='true' headline='true' />
         <box direction='row' align='center' gap='small'>
           <box gap='small' align='center'>
             <timeseries datasource="{{ $name }}-cpu" label="{{ $runbookName }} {{ $name }} CPU Usage" />
