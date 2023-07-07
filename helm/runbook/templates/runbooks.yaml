@@ -1,19 +1,20 @@
-{{ $runbookName := include "common.tplvalues.render" ( dict "value" .Values.runbookName "context" $) }}
+{{ $runbookName := .Values.runbookName }}
 apiVersion: platform.plural.sh/v1alpha1
 kind: Runbook
 metadata:
-  name: {{ template "runbook.fullname" . }}
+name: {{ $runbookName }}
   labels:
     platform.plural.sh/pinned: 'true'
 {{ include "runbook.labels" . | indent 4 }}
 spec:
   name: {{ $runbookName }}
-  description: {{ include "common.tplvalues.render" ( dict "value" .Values.description "context" $) }}
+  description: {{ .Values.description }}
   datasources:
+  {{ $tplScope := .Values.tplScope }}
   {{- range $componentKey, $componentValue := .Values.components }}
   {{- $name := $componentKey }}
-  {{- $podRegex := include "common.tplvalues.render" ( dict "value" (index $componentValue "prometheus" "podRegexTpl") "context" $) }}
-  {{- $resourceName:= include "common.tplvalues.render" ( dict "value" (index $componentValue "resourceNameTpl" ) "context" $) }}
+  {{- $podRegex := include "common.tplvalues.runbook-render" ( dict "value" (index $componentValue "prometheus" "podRegexTpl") "context" $ "scope" $tplScope ) }}
+  {{- $resourceName:= include "common.tplvalues.runbook-render" ( dict "value" (index $componentValue "resourceNameTpl" ) "context" $ "scope" $tplScope ) }}
   - name: {{ $name }}-cpu
     type: prometheus
     prometheus:

@@ -5,26 +5,5 @@ description: "description text"
 podregex: "regex"
 resname: "resname"
 runbookName: "runbook-name"
-components:
-  a-name:
-    resourceNameTpl: "a-{{ .Values.resname }}-.*"
-    kind: deployment
-    path: path.to.component
-    prometheus:
-      podRegexTpl: "a-{{ .Values.podregex }}-.*"
-  b-name:
-    resourceNameTpl: "b-{{ .Values.resname }}-.*"
-    kind: deployment
-    path: long.path.to.component
-    prometheus:
-      podRegexTpl: "b-{{ .Values.podregex }}-.*"
-  c-name:
-    resourceNameTpl: "c-{{ .Values.resname }}-.*"
-    kind: statefulset
-    path: path.component
-    prometheus:
-      podRegexTpl: "c-{{ .Values.podregex }}-.*"
-
-path:
-  to:
-    key: "asdf-{{ .Values.description }}"
+tplScope: ""
+components: {}
