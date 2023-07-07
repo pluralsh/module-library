@@ -22,6 +22,7 @@ resource "aws_iam_policy" "iam_policy" {
   name_prefix = var.policy_prefix
   description = "policy for ${var.policy_prefix} s3 access"
   policy      = data.aws_iam_policy_document.admin.json
+  
 }
 
 data "aws_iam_policy_document" "admin" {
