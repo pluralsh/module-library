@@ -61,49 +61,12 @@ Usage:
 {{- end -}}
 
 {{/*
-Gets a value from .Values given
-Usage:
-{{ include "common.utils.getValueFromKey" (dict "key" "path.to.key" "context" $) }}
-*/}}
-{{- define "common.utils.getValueFromKey" -}}
-{{- $splitKey := splitList "." .key -}}
-{{- $value := "" -}}
-{{- $latestObj := $.context.Values -}}
-{{- range $splitKey -}}
-  {{- if not $latestObj -}}
-    {{- printf "please review the entire path of '%s' exists in values" $.key | fail -}}
-  {{- end -}}
-  {{- $value = ( index $latestObj . ) -}}
-  {{- $latestObj = $value -}}
-{{- end -}}
-{{- printf "%v" (default "" $value) -}} 
-{{- end -}}
-
-{{/*
-Returns first .Values key with a defined value or first of the list if all non-defined
-Usage:
-{{ include "common.utils.getKeyFromList" (dict "keys" (list "path.to.key1" "path.to.key2") "context" $) }}
-*/}}
-{{- define "common.utils.getKeyFromList" -}}
-{{- $key := first .keys -}}
-{{- $reverseKeys := reverse .keys }}
-{{- range $reverseKeys }}
-  {{- $value := include "common.utils.getValueFromKey" (dict "key" . "context" $.context ) }}
-  {{- if $value -}}
-    {{- $key = . }}
-  {{- end -}}
-{{- end -}}
-{{- printf "%s" $key -}} 
-{{- end -}}
-
-{{/* vim: set filetype=mustache: */}}
-{{/*
 Renders a value that contains template perhaps with scope if the scope is present.
 Usage:
-{{ include "common.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $ ) }}
-{{ include "common.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $ "scope" $app ) }}
+{{ include "runbook.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $ ) }}
+{{ include "runbook.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $ "scope" $app ) }}
 */}}
-{{- define "common.tplvalues.runbook-render" -}}
+{{- define "runbook.tplvalues.render" -}}
 {{- if .scope }}
   {{- if typeIs "string" .value }}
     {{- tpl (cat "{{- with $.RelativeScope -}}" .value  "{{- end }}") (merge (dict "RelativeScope" .scope) .context) }}
@@ -119,15 +82,6 @@ Usage:
 {{- end -}}
 {{- end -}}
 
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "common.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "common.tplvalues.simplerender" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
+{{- define "magda.var_dump" -}}
+{{- . | mustToPrettyJson | printf "\nThe JSON output of the dumped var is: \n%s" | fail }}
 {{- end -}}

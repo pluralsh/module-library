@@ -1,32 +1,36 @@
-{{ $runbookName := .Values.runbookName }}
+{{/*
+Renders a value that contains template perhaps with scope if the scope is present.
+Usage:
+{{ include "runbook.compile" ( dict "value" .Values.path.to.the.runbook.spec "context" $ ) }}
+*/}}
+{{- define "runbook.compile.tpl" -}}
+{{ $runbookName := .value.runbookName }}
+{{ $ctx := .context }}
 apiVersion: platform.plural.sh/v1alpha1
 kind: Runbook
 metadata:
-name: {{ $runbookName }}
-  labels:
-    platform.plural.sh/pinned: 'true'
-{{ include "runbook.labels" . | indent 4 }}
+  name: {{ $runbookName }}
+  labels: {{ include "runbook.tplvalues.render" ( dict "value" .value.labels "context" $ctx) | nindent 4}}
 spec:
   name: {{ $runbookName }}
-  description: {{ .Values.description }}
+  description: {{ .value.description }}
   datasources:
-  {{ $tplScope := .Values.tplScope }}
-  {{- range $componentKey, $componentValue := .Values.components }}
+  {{- range $componentKey, $componentValue := .value.components }}
   {{- $name := $componentKey }}
-  {{- $podRegex := include "common.tplvalues.runbook-render" ( dict "value" (index $componentValue "prometheus" "podRegexTpl") "context" $ "scope" $tplScope ) }}
-  {{- $resourceName:= include "common.tplvalues.runbook-render" ( dict "value" (index $componentValue "resourceNameTpl" ) "context" $ "scope" $tplScope ) }}
+  {{- $podRegex := include "runbook.tplvalues.render" ( dict "value" (index $componentValue "prometheus" "podRegexTpl") "context" $ctx) }}
+  {{- $resourceName:= include "runbook.tplvalues.render" ( dict "value" (index $componentValue "resourceNameTpl" ) "context" $ctx) }}
   - name: {{ $name }}-cpu
     type: prometheus
     prometheus:
       format: cpu
       legend: $pod
-      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ $.Release.Namespace }}",pod=~"{{ $podRegex }}"}[5m])) by (pod)
+      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ $ctx.Release.Namespace }}",pod=~"{{ $podRegex }}"}[5m])) by (pod)
   - name: {{ $name }}-memory
     type: prometheus
     prometheus:
       format: memory
       legend: $pod
-      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ $.Release.Namespace }}",pod=~"{{ $podRegex }}"}[5m])) by (pod)
+      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ $ctx.Release.Namespace }}",pod=~"{{ $podRegex }}"}[5m])) by (pod)
   - name: {{ $name }}
     type: kubernetes
     kubernetes:
@@ -39,7 +43,7 @@ spec:
     redirectTo: '/'
     configuration:
       updates:
-      {{- range $componentKey, $componentValue := .Values.components }}
+      {{- range $componentKey, $componentValue := .value.components }}
       {{- $name := $componentKey }}
       {{- $pathList := splitList "." .path }}
       - path: 
@@ -79,7 +83,7 @@ spec:
     <box pad='small' gap='medium' direction='row' align='center'>
       <button label='Scale' action='scale' primary='true' headline='true' />
     </box>
-    {{- range $componentKey, $componentValue := .Values.components }}
+    {{- range $componentKey, $componentValue := .value.components }}
     {{- $name := $componentKey }}
     <root gap='medium'>
       <box pad='small' gap='medium' direction='row' align='center'>
@@ -130,3 +134,4 @@ spec:
       </box>
     </root>
     {{- end }}
+{{- end -}}
