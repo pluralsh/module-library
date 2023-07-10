@@ -80,12 +80,12 @@ spec:
         valueFrom: {{ $name }}-memory-limit
       {{- end }}
   display: |-
-    <box pad='small' gap='medium' direction='row' align='center'>
-      <button label='Scale' action='scale' primary='true' headline='true' />
-    </box>
+    <root gap='medium'>
+      <box pad='small' gap='medium' direction='row' align='center'>
+        <button label='Scale' action='scale' primary='true' headline='true' />
+      </box>
     {{- range $componentKey, $componentValue := .value.components }}
     {{- $name := $componentKey }}
-    <root gap='medium'>
       <box pad='small' gap='medium' direction='row' align='center'>
         <box direction='row' align='center' gap='small'>
           <box gap='small' align='center'>
@@ -132,6 +132,6 @@ spec:
           </box>
         </box>
       </box>
-    </root>
     {{- end }}
+    </root>
 {{- end -}}
