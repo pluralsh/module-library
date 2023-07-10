@@ -1,7 +1,10 @@
 {{/*
 Renders a value that contains template perhaps with scope if the scope is present.
 Usage:
-{{ include "runbook.compile" ( dict "value" .Values.path.to.the.runbook.spec "context" $ ) }}
+{{ include "runbook.compile.tpl" ( dict "value" .Values.path.to.the.runbook.spec "context" $ ) }}
+If you're using 'include' inside your values.yaml templates, you need to pass the correct context, e.g.
+{{- include "runbook.compile.tpl" ( dict "value" .Values.runbook.sentry "context" (dict "Chart" $.Chart "Subcharts" $.Subcharts "Release" $.Release "Template" $.Template "Values" $.Values ) ) }}
+Here it's important that you have the 'Template' key in the context, otherwise you'll get an error 
 */}}
 {{- define "runbook.compile.tpl" -}}
 {{ $runbookName := .value.runbookName }}
