@@ -1,9 +1,0 @@
-# Default values for runbook.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-description: "description text"
-podregex: "regex"
-resname: "resname"
-runbookName: "runbook-name"
-tplScope: ""
-components: {}
