@@ -475,6 +475,19 @@ entries:
   runbook:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2023-07-11T11:01:35.571758265Z"
+    description: A Helm chart for Kubernetes
+    digest: 101106a77e921c351fc30816250eb1d1f99470509d00c8448d0ab1ac05dda2f0
+    maintainers:
+    - name: Plural
+      url: https://www.plural.sh
+    name: runbook
+    type: library
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/runbook-0.1.1/runbook-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2023-07-11T08:35:34.714298249Z"
     description: A Helm chart for Kubernetes
     digest: d14a01f21d1a3681cdc3d8019160807ecd8a3dd0f93871dc390929d74cb5190b
@@ -608,4 +621,4 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.0/test-base-0.1.0.tgz
     version: 0.1.0
-generated: "2023-07-11T08:35:34.714388749Z"
+generated: "2023-07-11T11:01:35.572015768Z"
