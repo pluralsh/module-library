@@ -15,7 +15,7 @@ metadata:
   name: {{ $runbookName }}
   labels: {{ include "runbook.tplvalues.render" ( dict "value" .value.labels "context" $ctx) | nindent 4}}
 spec:
-  name: {{ $runbookName | title }}
+  name: {{ $runbookName | replace "-" " " | title }}
   description: {{ .value.description }}
   datasources:
   {{- range $componentKey, $componentValue := .value.components }}
@@ -33,7 +33,7 @@ spec:
     prometheus:
       format: memory
       legend: $pod
-      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ $ctx.Release.Namespace }}",pod=~"{{ $podRegex }}"}[5m])) by (pod)
+      query: sum(container_memory_working_set_bytes{namespace="{{ $ctx.Release.Namespace }}",pod=~"{{ $podRegex }}"}) by (pod)
   - name: {{ $name }}
     type: kubernetes
     kubernetes:
@@ -92,13 +92,13 @@ spec:
       <box pad='small' gap='medium' direction='row' align='center'>
         <box direction='row' align='center' gap='small'>
           <box gap='small' align='center'>
-            <timeseries datasource="{{ $name }}-cpu" label="{{ $runbookName }} {{ $name | title }} CPU Usage" />
+            <timeseries datasource="{{ $name }}-cpu" label="{{ $runbookName | replace "-" " " | title }} {{ $name | title }} CPU Usage" />
             <text size='small'>You should set a reservation to 
               roughly correspond to 80% utilization</text>
             <text size='small'>A CPU limit should not be set</text>
           </box>
           <box gap='small' align='center'>
-            <timeseries datasource="{{ $name }}-memory" label="{{ $runbookName }} {{ $name | title }} Memory Usage" />
+            <timeseries datasource="{{ $name }}-memory" label="{{ $runbookName | replace "-" " " | title }} {{ $name | title }} Memory Usage" />
             <text size='small'>You should set a reservation to 
               roughly correspond to 80% utilization</text>
             <text size='small'>A Memory limit should be set</text>
@@ -106,13 +106,13 @@ spec:
         </box>
         <box gap='small'>
           <box gap='xsmall'>
-            <input placeholder="250m" label='{{ $runbookName }} {{ $name | title }} CPU Request' name='{{ $name }}-cpu'>
+            <input placeholder="250m" label='{{ $runbookName | replace "-" " " | title }} {{ $name | title }} CPU Request' name='{{ $name }}-cpu'>
               <valueFrom 
                 datasource="{{ $name }}"
                 doc="kubernetes.raw"
                 path="spec.template.spec.containers[0].resources.requests.cpu" />
             </input>
-            <input placeholder="1Gi" label='{{ $runbookName }} {{ $name | title }} Memory Request' name='{{ $name }}-memory'>
+            <input placeholder="1Gi" label='{{ $runbookName | replace "-" " " | title }} {{ $name | title }} Memory Request' name='{{ $name }}-memory'>
               <valueFrom 
                 datasource="{{ $name }}"
                 doc="kubernetes.raw"
@@ -120,13 +120,13 @@ spec:
             </input>
           </box>
           <box gap='xsmall'>
-            <input placeholder="250m" label='{{ $runbookName }} {{ $name | title }} CPU Limit' name='{{ $name }}-cpu-limit'>
+            <input placeholder="250m" label='{{ $runbookName | replace "-" " " | title }} {{ $name | title }} CPU Limit' name='{{ $name }}-cpu-limit'>
               <valueFrom
                 datasource="{{ $name }}"
                 doc="kubernetes.raw"
                 path="spec.template.spec.containers[0].resources.limits.cpu" />
             </input>
-            <input placeholder="1Gi" label='{{ $runbookName }} {{ $name | title }} Memory Limit' name='{{ $name }}-memory-limit'>
+            <input placeholder="1Gi" label='{{ $runbookName | replace "-" " " | title }} {{ $name | title }} Memory Limit' name='{{ $name }}-memory-limit'>
               <valueFrom
                 datasource="{{ $name }}"
                 doc="kubernetes.raw"
