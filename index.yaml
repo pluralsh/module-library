@@ -472,6 +472,20 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/rabbitmq-0.1.0/rabbitmq-0.1.0.tgz
     version: 0.1.0
+  runbook:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-07-11T08:35:34.714298249Z"
+    description: A Helm chart for Kubernetes
+    digest: d14a01f21d1a3681cdc3d8019160807ecd8a3dd0f93871dc390929d74cb5190b
+    maintainers:
+    - name: Plural
+      url: https://www.plural.sh
+    name: runbook
+    type: library
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/runbook-0.1.0/runbook-0.1.0.tgz
+    version: 0.1.0
   test-base:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -594,4 +608,4 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.0/test-base-0.1.0.tgz
     version: 0.1.0
-generated: "2023-07-04T14:45:13.585374803Z"
+generated: "2023-07-11T08:35:34.714388749Z"
