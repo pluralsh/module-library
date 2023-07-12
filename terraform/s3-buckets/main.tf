@@ -3,6 +3,9 @@ resource "aws_s3_bucket" "bucket" {
   bucket        = each.key
   acl           = var.acl
   force_destroy = true
+  versioning {
+    enabled = var.enable_versioning
+  }
 }
 
 resource "aws_iam_policy" "iam_policy" {
@@ -13,8 +16,8 @@ resource "aws_iam_policy" "iam_policy" {
 
 data "aws_iam_policy_document" "admin" {
   statement {
-    sid    = "admin"
-    effect = "Allow"
+    sid     = "admin"
+    effect  = "Allow"
     actions = ["s3:*"]
 
     resources = concat(

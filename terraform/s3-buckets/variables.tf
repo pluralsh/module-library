@@ -3,10 +3,15 @@ variable "bucket_names" {
 }
 
 variable "acl" {
-  type = string
+  type    = string
   default = "private"
 }
 
 variable "policy_prefix" {
   type = string
+}
+
+variable "enable_versioning" {
+  type    = bool
+  default = false
 }
