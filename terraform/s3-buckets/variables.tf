@@ -3,7 +3,7 @@ variable "bucket_names" {
 }
 
 variable "acl" {
-  type = string
+  type    = string
   default = "private"
 }
 
@@ -23,7 +23,7 @@ variable "bucket_tags" {
   default     = {}
 }
 
-variable "enable_versioning" { 
-  type = bool
+variable "enable_versioning" {
+  type    = bool
   default = false
 }

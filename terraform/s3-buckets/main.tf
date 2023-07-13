@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "bucket" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm     = "AES256"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -22,13 +22,13 @@ resource "aws_iam_policy" "iam_policy" {
   name_prefix = var.policy_prefix
   description = "policy for ${var.policy_prefix} s3 access"
   policy      = data.aws_iam_policy_document.admin.json
-  
+
 }
 
 data "aws_iam_policy_document" "admin" {
   statement {
-    sid    = "admin"
-    effect = "Allow"
+    sid     = "admin"
+    effect  = "Allow"
     actions = ["s3:*"]
 
     resources = concat(
