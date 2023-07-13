@@ -3,7 +3,7 @@ variable "bucket_names" {
 }
 
 variable "acl" {
-  type = string
+  type    = string
   default = "private"
 }
 
@@ -21,4 +21,9 @@ variable "bucket_tags" {
   type        = map(string)
   description = "tags to apply to the buckets"
   default     = {}
+}
+
+variable "enable_versioning" {
+  type    = bool
+  default = false
 }
