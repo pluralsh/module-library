@@ -11,6 +11,15 @@ resource "aws_iam_policy" "iam_policy" {
   policy      = data.aws_iam_policy_document.admin.json
 }
 
+resource "aws_s3_bucket_versioning" "version" {
+  for_each = toset(var.bucket_names)
+  bucket = aws_s3_bucket.bucket[each.key].id
+  
+  versioning_configuration {
+    status = var.enable_versioning ? "Enabled" : "Disabled"
+  }
+}
+
 data "aws_iam_policy_document" "admin" {
   statement {
     sid    = "admin"

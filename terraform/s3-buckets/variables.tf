@@ -10,3 +10,8 @@ variable "acl" {
 variable "policy_prefix" {
   type = string
 }
+
+variable "enable_versioning" { 
+  type = bool
+  default = false
+}
