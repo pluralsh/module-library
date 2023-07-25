@@ -25,7 +25,7 @@ variable "node_groups" {
 }
 
 variable "launch_templates" {
-  description = "Map of maps of `launch_templates` to create."
+  description = "Map of maps of `launch_templates` to create. The keys of this map must match the keys of `var.node_groups`. See \"`launch_templates`\" section in README.md for more details"
   type        = any
   default     = {}
 }
