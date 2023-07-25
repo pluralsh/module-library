@@ -41,6 +41,8 @@ resource "aws_launch_template" "this" {
   image_id  = var.ami_id != "" ? var.ami_id : data.aws_ami.ami.id
   user_data = module.user_data.user_data
 
+  # TODO: most of these try statements are probably unnecessary, because they are already set to default null in the variables
+
   block_device_mappings {
     device_name = var.block_device_mappings.device_name
 
