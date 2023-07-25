@@ -11,7 +11,7 @@ module "launch_templates" {
   launch_template_description     = try(each.value.launch_template_description, null)
   ebs_optimized                   = try(each.value.ebs_optimized, null)
   # one of the following must be specified
-  ami_name_filter = try(each.value.ami_name_filter, null)
+  ami_filter_name = try(each.value.ami_filter_name, null)
   ami_id          = try(each.value.ami_id, null)
   # optional
   key_name                               = try(each.value.key_name, null)

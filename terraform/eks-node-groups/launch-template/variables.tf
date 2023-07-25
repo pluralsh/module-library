@@ -28,7 +28,7 @@ variable "ebs_optimized" {
   default     = null
 }
 
-variable "ami_name_filter" {
+variable "ami_filter_name" {
   description = "A filter used to find and select an AMI. This is used to generate the AMI ID when `ami_id` is not supplied"
   type        = string
   default     = null
