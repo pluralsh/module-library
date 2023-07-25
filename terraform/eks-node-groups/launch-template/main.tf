@@ -7,11 +7,22 @@ data "aws_eks_cluster" "cluster" {
   name = var.cluster_name
 }
 
+data "aws_ami" "ami" {
+  # If more or less than a single match is returned by the search, Terraform will fail.
+  # Ensure that your search is specific enough to return a single AMI ID only, or use most_recent to choose the most recent one.
+  # If you want to match multiple AMIs, use the aws_ami_ids data source instead.
+  most_recent = true
+  filter {
+    name = "name"
+    #values = ["ubuntu-eks/k8s_${var.kubernetes_version}/images/hvm-ssd/ubuntu-focal-20.04-${each.key}-server-*"]
+    values = [var.ami_filter_name]
+  }
+}
+
 
 module "user_data" {
-  source = "../user_data"
-
-  create = var.create
+  #source = "../user_data"
+  source = "github.com/pluralsh/module-library//terraform/eks-node-groups/launch-template?ref=feat/ubuntu-ng"
 
   cluster_name        = var.cluster_name
   cluster_endpoint    = var.cluster_endpoint
@@ -31,6 +42,7 @@ resource "aws_launch_template" "this" {
   name        = var.launch_template_use_name_prefix ? null : local.launch_template_name
   name_prefix = var.launch_template_use_name_prefix ? "${local.launch_template_name}-" : null
 
+  image_id = var.ami_id != "" ? var.ami_id : data.aws_ami.ami.id
   block_device_mappings {
     device_name = var.block_device_mappings.device_name
 
@@ -84,7 +96,6 @@ resource "aws_launch_template" "this" {
     enabled = var.enclave_options.enabled
   }
 
-  image_id = var.ami_id
 
   instance_market_options {
     market_type = try(var.instance_market_options.market_type, null)
