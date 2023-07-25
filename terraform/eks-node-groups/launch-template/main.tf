@@ -3,10 +3,6 @@ locals {
   security_group_ids   = compact(concat([var.cluster_primary_security_group_id], var.vpc_security_group_ids))
 }
 
-data "aws_eks_cluster" "cluster" {
-  name = var.cluster_name
-}
-
 data "aws_ami" "ami" {
   # If more or less than a single match is returned by the search, Terraform will fail.
   # Ensure that your search is specific enough to return a single AMI ID only, or use most_recent to choose the most recent one.
