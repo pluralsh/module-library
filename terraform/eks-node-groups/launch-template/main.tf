@@ -22,7 +22,7 @@ data "aws_ami" "ami" {
 
 module "user_data" {
   #source = "../user_data"
-  source = "github.com/pluralsh/module-library//terraform/eks-node-groups/launch-template?ref=feat/ubuntu-ng"
+  source = "github.com/pluralsh/module-library//terraform/eks-node-groups/user-data?ref=feat/ubuntu-ng"
 
   cluster_name        = var.cluster_name
   cluster_endpoint    = var.cluster_endpoint
