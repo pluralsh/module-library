@@ -3,12 +3,15 @@ locals {
   security_group_ids   = compact(concat([var.cluster_primary_security_group_id], var.vpc_security_group_ids))
 }
 
+data "aws_eks_cluster" "cluster" {
+  name = var.cluster_name
+}
+
 
 module "user_data" {
-  source = "../_user_data"
+  source = "../user_data"
 
-  create   = var.create
-  platform = var.platform
+  create = var.create
 
   cluster_name        = var.cluster_name
   cluster_endpoint    = var.cluster_endpoint

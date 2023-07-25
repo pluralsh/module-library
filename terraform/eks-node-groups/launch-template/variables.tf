@@ -10,12 +10,6 @@ variable "launch_template_name" {
   default     = null
 }
 
-variable "ami_filter" {
-  description = "A filter used to find and select an AMI. This is used to generate the AMI ID when `ami_id` is not supplied"
-  type        = string
-  default     = null
-}
-
 variable "launch_template_use_name_prefix" {
   description = "Determines whether to use `launch_template_name` as is or create a unique name beginning with the `launch_template_name` as the prefix"
   type        = bool
