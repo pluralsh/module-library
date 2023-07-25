@@ -46,7 +46,7 @@ resource "aws_launch_template" "this" {
   block_device_mappings {
     device_name = var.block_device_mappings.device_name
 
-    ebs = {
+    ebs {
       delete_on_termination = try(var.block_device_mappings.ebs.delete_on_termination, null)
       encrypted             = try(var.block_device_mappings.ebs.encrypted, null)
       iops                  = try(var.block_device_mappings.ebs.iops, null)
@@ -64,9 +64,9 @@ resource "aws_launch_template" "this" {
   capacity_reservation_specification {
     capacity_reservation_preference = try(var.capacity_reservation_specification.capacity_reservation_preference, null)
 
-    capacity_reservation_target = {
+    capacity_reservation_target {
       capacity_reservation_id                 = try(var.capacity_reservation_specification.capacity_reservation_target.capacity_reservation_id, null)
-      capacity_reservation_resource_group_arn = try(var.capacitiy_reservation_specification.capacity_reservation_target.capacity_reservation_resource_group_arn, null)
+      capacity_reservation_resource_group_arn = try(var.capacity_reservation_specification.capacity_reservation_target.capacity_reservation_resource_group_arn, null)
     }
   }
 
@@ -100,7 +100,7 @@ resource "aws_launch_template" "this" {
   instance_market_options {
     market_type = try(var.instance_market_options.market_type, null)
 
-    spot_options = {
+    spot_options {
       block_duration_minutes         = try(var.instance_market_options.spot_options.block_duration_minutes, null)
       instance_interruption_behavior = try(var.instance_market_options.spot_options.instance_interruption_behavior, null)
       max_price                      = try(var.instance_market_options.spot_options.max_price, null)
@@ -174,7 +174,7 @@ resource "aws_launch_template" "this" {
     tenancy                 = try(var.placement.tenancy, null)
   }
 
-  private_dns_name_options = {
+  private_dns_name_options {
     enable_resource_name_dns_aaaa_record = try(var.private_dns_name_options.enable_resource_name_dns_aaaa_record, null)
     enable_resource_name_dns_a_record    = try(var.private_dns_name_options.enable_resource_name_dns_a_record, null)
     hostname_type                        = try(var.private_dns_name_options.hostname_type, null)
