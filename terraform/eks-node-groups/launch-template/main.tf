@@ -38,7 +38,9 @@ resource "aws_launch_template" "this" {
   name        = var.launch_template_use_name_prefix ? null : local.launch_template_name
   name_prefix = var.launch_template_use_name_prefix ? "${local.launch_template_name}-" : null
 
-  image_id = var.ami_id != "" ? var.ami_id : data.aws_ami.ami.id
+  image_id  = var.ami_id != "" ? var.ami_id : data.aws_ami.ami.id
+  user_data = module.user_data.user_data
+
   block_device_mappings {
     device_name = var.block_device_mappings.device_name
 
