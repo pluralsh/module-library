@@ -41,7 +41,7 @@ module "launch_templates" {
   tag_specifications                     = try(each.value.tag_specifications, [])
   # the following are required if you need custom user data in you launch template, e.g. because you're using custom AMI 
   enable_bootstrap_user_data = try(each.value.enable_bootstrap_user_data, false)
-  cluster_name               = try(each.value.cluster_name, "")
+  cluster_name               = try(each.value.cluster_name, var.cluster_name)
   cluster_endpoint           = try(each.value.cluster_endpoint, "")
   cluster_auth_base64        = try(each.value.cluster_auth_base64, "")
   # this is optional if you're using a custom 
