@@ -53,6 +53,13 @@ variable "bootstrap_extra_args" {
   default     = ""
 }
 
+variable "kubelet_extra_args" {
+  type = map(string)
+  # You can define your default map here if needed
+  default     = {}
+  description = "format: {\"node-labels\" = \"labels\" ... \"register-with-taints\" = \"taints\"}. no need for the -- before the flag"
+}
+
 variable "user_data_template_path" {
   description = "Path to a local, custom user data template file to use when rendering user data"
   type        = string
