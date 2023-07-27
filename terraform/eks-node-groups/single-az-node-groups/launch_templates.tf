@@ -48,8 +48,9 @@ module "launch_templates" {
   cluster_service_ipv4_cidr = try(each.value.cluster_service_ipv4_cidr, null)
   pre_bootstrap_user_data   = try(each.value.pre_bootstrap_user_data, "")
   post_bootstrap_user_data  = try(each.value.post_bootstrap_user_data, "")
-  # TODO: actually make this a map in the vars, easier for kubelet args
-  bootstrap_extra_args = try(each.value.bootstrap_extra_args, "")
-
-  depends_on = [random_pet.node_groups]
+  bootstrap_extra_args      = try(each.value.bootstrap_extra_args, "")
+  kubelet_extra_args        = try(each.value.kubelet_extra_args, {})
+  k8s_labels                = merge(try(local.node_groups_expanded[each.key]["labels"], {}), try(each.value.k8s_labels, {}))
+  k8s_taints                = concat(try(local.node_groups_expanded[each.key]["taints"], []), try(each.value.k8s_taints, []))
+  depends_on                = [random_pet.node_groups]
 }
