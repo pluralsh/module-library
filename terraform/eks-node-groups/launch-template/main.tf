@@ -1,6 +1,7 @@
 locals {
   launch_template_name = var.launch_template_name
   security_group_ids   = compact(concat([var.cluster_primary_security_group_id], var.vpc_security_group_ids))
+  has_taints           = length(var.k8s_taints) > 0 || length(try(var.kubelet_extra_args["--register-with-taints"], []) > 0)
 }
 
 data "aws_ami" "ami" {
@@ -33,8 +34,23 @@ module "user_data" {
   enable_bootstrap_user_data = var.enable_bootstrap_user_data
   pre_bootstrap_user_data    = var.pre_bootstrap_user_data
   post_bootstrap_user_data   = var.post_bootstrap_user_data
-  bootstrap_extra_args       = var.bootstrap_extra_args
-  user_data_template_path    = var.user_data_template_path
+  kubelet_extra_args = merge(
+    try(var.kubelet_extra_args, {}), # --node-labels and --register-with-taints are overwritten in this merge but handled seperately below
+    {
+      "--node-labels" = concat(
+        ["eks.amazonaws.com/nodegroup-image=${data.aws_ami.ami.id}"],
+        try(var.kubelet_extra_args["--node-labels"], []),
+        [for k, v in var.k8s_labels : format("%s=%s", k, v)]
+    ) },
+    has_taints ? {
+      "--register-with-taints" = concat(
+        try(var.kubelet_extra_args["--register-with-taints"], []),
+        [for t in var.k8s_taints : format("%s=%s:%s", t.key, t.value, t.effect)]
+      )
+    } : {}
+  )
+  bootstrap_extra_args    = var.bootstrap_extra_args
+  user_data_template_path = var.user_data_template_path
 }
 
 
