@@ -57,7 +57,7 @@ variable "kubelet_extra_args" {
   type = map(string)
   # You can define your default map here if needed
   default     = {}
-  description = "format: {\"node-labels\" = \"labels\" ... \"register-with-taints\" = \"taints\"}. no need for the -- before the flag"
+  description = "format: {\"--node-labels\" = \"labels\" ... \"--register-with-taints\" = \"taints\"}."
 }
 
 variable "user_data_template_path" {
