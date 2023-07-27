@@ -43,16 +43,16 @@ module "user_data" {
   kubelet_extra_args = merge(
     try(var.kubelet_extra_args, {}), # --node-labels and --register-with-taints are overwritten in this merge but handled seperately below
     {
-      "--node-labels" = concat(
+      "--node-labels" = join(",", concat(
         ["eks.amazonaws.com/nodegroup-image=${data.aws_ami.ami.id}"],
         try(var.kubelet_extra_args["--node-labels"], []),
         [for k, v in var.k8s_labels : format("%s=%s", k, v)]
-    ) },
+    )) },
     local.has_taints ? {
-      "--register-with-taints" = concat(
+      "--register-with-taints" = join(",", concat(
         try(var.kubelet_extra_args["--register-with-taints"], []),
         [for t in var.k8s_taints : format("%s=%s:%s", t.key, t.value, t.effect)]
-      )
+      ))
     } : {}
   )
   bootstrap_extra_args    = var.bootstrap_extra_args
