@@ -87,14 +87,14 @@ resource "aws_launch_template" "this" {
     virtual_name = try(var.block_device_mappings.virtual_name, null)
   }
 
-  capacity_reservation_specification {
-    capacity_reservation_preference = try(var.capacity_reservation_specification.capacity_reservation_preference, null)
+  #capacity_reservation_specification {
+  #  capacity_reservation_preference = try(var.capacity_reservation_specification.capacity_reservation_preference, null)
 
-    capacity_reservation_target {
-      capacity_reservation_id                 = try(var.capacity_reservation_specification.capacity_reservation_target.capacity_reservation_id, null)
-      capacity_reservation_resource_group_arn = try(var.capacity_reservation_specification.capacity_reservation_target.capacity_reservation_resource_group_arn, null)
-    }
-  }
+  #  capacity_reservation_target {
+  #    capacity_reservation_id                 = try(var.capacity_reservation_specification.capacity_reservation_target.capacity_reservation_id, null)
+  #    capacity_reservation_resource_group_arn = try(var.capacity_reservation_specification.capacity_reservation_target.capacity_reservation_resource_group_arn, null)
+  #  }
+  #}
 
   cpu_options {
     core_count       = try(var.cpu_options.cpu_options.value.core_count, null)
@@ -144,16 +144,16 @@ resource "aws_launch_template" "this" {
     license_configuration_arn = try(var.license_specifications.license_configuration_arn, null)
   }
 
-  maintenance_options {
-    auto_recovery = try(var.maintenance_options.auto_recovery, null)
-  }
+  #maintenance_options {
+  #  auto_recovery = try(var.maintenance_options.auto_recovery, null)
+  #}
 
   metadata_options {
     http_endpoint               = try(var.metadata_options.http_endpoint, null)
     http_protocol_ipv6          = try(var.metadata_options.http_protocol_ipv6, null)
     http_put_response_hop_limit = try(var.metadata_options.http_put_response_hop_limit, null)
     http_tokens                 = try(var.metadata_options.http_tokens, null)
-    instance_metadata_tags      = try(var.metadata_options.instance_metadata_tags, null)
+    #instance_metadata_tags      = try(var.metadata_options.instance_metadata_tags, null)
   }
 
   monitoring {
@@ -172,15 +172,15 @@ resource "aws_launch_template" "this" {
       interface_type               = try(each.value.interface_type, null)
       ipv4_address_count           = try(each.value.ipv4_address_count, null)
       ipv4_addresses               = try(each.value.ipv4_addresses, [])
-      ipv4_prefix_count            = try(each.value.ipv4_prefix_count, null)
-      ipv4_prefixes                = try(each.value.ipv4_prefixes, null)
-      ipv6_address_count           = try(each.value.ipv6_address_count, null)
-      ipv6_addresses               = try(each.value.ipv6_addresses, [])
-      ipv6_prefix_count            = try(each.value.ipv6_prefix_count, null)
-      ipv6_prefixes                = try(each.value.ipv6_prefixes, [])
-      network_card_index           = try(each.value.network_card_index, null)
-      network_interface_id         = try(each.value.network_interface_id, null)
-      private_ip_address           = try(each.value.private_ip_address, null)
+      #ipv4_prefix_count            = try(each.value.ipv4_prefix_count, null)
+      #ipv4_prefixes                = try(each.value.ipv4_prefixes, null)
+      ipv6_address_count = try(each.value.ipv6_address_count, null)
+      ipv6_addresses     = try(each.value.ipv6_addresses, [])
+      #ipv6_prefix_count            = try(each.value.ipv6_prefix_count, null)
+      #ipv6_prefixes                = try(each.value.ipv6_prefixes, [])
+      #network_card_index           = try(each.value.network_card_index, null)
+      network_interface_id = try(each.value.network_interface_id, null)
+      private_ip_address   = try(each.value.private_ip_address, null)
       # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/4570
       security_groups = compact(concat(try(network_interfaces.value.security_groups, []), local.security_group_ids))
       # Set on EKS managed node group, will fail if set here
@@ -200,11 +200,11 @@ resource "aws_launch_template" "this" {
     tenancy                 = try(var.placement.tenancy, null)
   }
 
-  private_dns_name_options {
-    enable_resource_name_dns_aaaa_record = try(var.private_dns_name_options.enable_resource_name_dns_aaaa_record, null)
-    enable_resource_name_dns_a_record    = try(var.private_dns_name_options.enable_resource_name_dns_a_record, null)
-    hostname_type                        = try(var.private_dns_name_options.hostname_type, null)
-  }
+  #private_dns_name_options {
+  #  enable_resource_name_dns_aaaa_record = try(var.private_dns_name_options.enable_resource_name_dns_aaaa_record, null)
+  #  enable_resource_name_dns_a_record    = try(var.private_dns_name_options.enable_resource_name_dns_a_record, null)
+  #  hostname_type                        = try(var.private_dns_name_options.hostname_type, null)
+  #}
 
   ram_disk_id = var.ram_disk_id
 
