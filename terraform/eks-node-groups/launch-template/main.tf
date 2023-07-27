@@ -9,10 +9,16 @@ data "aws_ami" "ami" {
   # Ensure that your search is specific enough to return a single AMI ID only, or use most_recent to choose the most recent one.
   # If you want to match multiple AMIs, use the aws_ami_ids data source instead.
   most_recent = true
+  owners      = ["099720109477"] # Canonical
   filter {
     name = "name"
     #values = ["ubuntu-eks/k8s_${var.kubernetes_version}/images/hvm-ssd/ubuntu-focal-20.04-${each.key}-server-*"]
     values = [var.ami_filter_name]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
   }
 }
 
