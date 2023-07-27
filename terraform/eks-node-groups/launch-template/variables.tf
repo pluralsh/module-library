@@ -242,6 +242,24 @@ variable "bootstrap_extra_args" {
   default     = ""
 }
 
+variable "kubelet_extra_args" {
+  type = map(any)
+  # You can define your default map here if needed
+  default = {}
+}
+
+variable "k8s_labels" {
+  description = "A map of Kubernetes labels to add to the node group"
+  type        = map(string)
+  default     = {}
+}
+
+variable "k8s_taints" {
+  description = "A list of Kubernetes taints to add to the node group"
+  type        = list(any)
+  default     = []
+}
+
 variable "user_data_template_path" {
   description = "Path to a local, custom user data template file to use when rendering user data"
   type        = string
