@@ -1,7 +1,7 @@
 locals {
   launch_template_name = var.launch_template_name
   security_group_ids   = compact(concat([var.cluster_primary_security_group_id], var.vpc_security_group_ids))
-  has_taints           = length(var.k8s_taints) > 0 || length(try(var.kubelet_extra_args["--register-with-taints"], []) > 0)
+  has_taints           = length(var.k8s_taints) > 0 || length(try(var.kubelet_extra_args["--register-with-taints"], [])) > 0
 }
 
 data "aws_ami" "ami" {
