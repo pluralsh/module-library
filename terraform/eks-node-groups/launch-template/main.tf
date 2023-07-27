@@ -70,7 +70,7 @@ resource "aws_launch_template" "this" {
   # TODO: most of these try statements are probably unnecessary, because they are already set to default null in the variables
 
   block_device_mappings {
-    device_name = var.block_device_mappings.device_name
+    device_name = try(var.block_device_mappings.device_name, null)
 
     ebs {
       delete_on_termination = try(var.block_device_mappings.ebs.delete_on_termination, null)
@@ -119,7 +119,7 @@ resource "aws_launch_template" "this" {
   }
 
   enclave_options {
-    enabled = var.enclave_options.enabled
+    enabled = try(var.enclave_options.enabled, false)
   }
 
 
