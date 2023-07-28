@@ -88,14 +88,6 @@ resource "aws_launch_template" "this" {
   }
 
 
-  #cpu_options {
-  #  core_count       = try(var.cpu_options.cpu_options.value.core_count, null)
-  #  threads_per_core = try(var.cpu_options.threads_per_core, null)
-  #}
-
-  #credit_specification {
-  #  cpu_credits = try(var.credit_specification.cpu_credits, null)
-  #}
 
   default_version         = var.launch_template_default_version
   description             = var.launch_template_description
@@ -124,17 +116,6 @@ resource "aws_launch_template" "this" {
   }
 
 
-  #instance_market_options {
-  #  market_type = try(var.instance_market_options.market_type, null)
-
-  #  spot_options {
-  #    block_duration_minutes         = try(var.instance_market_options.spot_options.block_duration_minutes, null)
-  #    instance_interruption_behavior = try(var.instance_market_options.spot_options.instance_interruption_behavior, null)
-  #    max_price                      = try(var.instance_market_options.spot_options.max_price, null)
-  #    spot_instance_type             = try(var.instance_market_options.spot_options.spot_instance_type, null)
-  #    valid_until                    = try(var.instance_market_options.spot_options.valid_until, null)
-  #  }
-  #}
 
   # # Set on node group instead
   # instance_type = var.launch_template_instance_type
@@ -148,6 +129,18 @@ resource "aws_launch_template" "this" {
       license_configuration_arn = license_specifications.value.license_configuration_arn
     }
   }
+
+  #instance_market_options {
+  #  market_type = try(var.instance_market_options.market_type, null)
+
+  #  spot_options {
+  #    block_duration_minutes         = try(var.instance_market_options.spot_options.block_duration_minutes, null)
+  #    instance_interruption_behavior = try(var.instance_market_options.spot_options.instance_interruption_behavior, null)
+  #    max_price                      = try(var.instance_market_options.spot_options.max_price, null)
+  #    spot_instance_type             = try(var.instance_market_options.spot_options.spot_instance_type, null)
+  #    valid_until                    = try(var.instance_market_options.spot_options.valid_until, null)
+  #  }
+  #}
 
 
   #metadata_options {
@@ -207,6 +200,16 @@ resource "aws_launch_template" "this" {
   #    tags          = merge(var.tags, { Name = var.name }, var.launch_template_tags)
   #  }
   #}
+
+  #cpu_options {
+  #  core_count       = try(var.cpu_options.cpu_options.value.core_count, null)
+  #  threads_per_core = try(var.cpu_options.threads_per_core, null)
+  #}
+
+  #credit_specification {
+  #  cpu_credits = try(var.credit_specification.cpu_credits, null)
+  #}
+
 
   update_default_version = var.update_launch_template_default_version
   vpc_security_group_ids = length(var.network_interfaces) > 0 ? [] : local.security_group_ids
