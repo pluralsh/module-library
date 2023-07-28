@@ -50,7 +50,7 @@ module "launch_templates" {
   post_bootstrap_user_data  = try(each.value.post_bootstrap_user_data, "")
   bootstrap_extra_args      = try(each.value.bootstrap_extra_args, "")
   kubelet_extra_args        = try(each.value.kubelet_extra_args, {})
-  k8s_labels                = merge(try(local.node_groups_expanded[each.key]["labels"], {}), try(each.value.k8s_labels, {}))
-  k8s_taints                = concat(try(local.node_groups_expanded[each.key]["taints"], []), try(each.value.k8s_taints, []))
+  k8s_labels                = merge(try(local.node_groups_expanded[each.key]["k8s_labels"], {}), try(each.value.k8s_labels, {}))
+  k8s_taints                = concat(try(local.node_groups_expanded[each.key]["k8s_taints"], []), try(each.value.k8s_taints, []))
   depends_on                = [random_pet.node_groups]
 }
