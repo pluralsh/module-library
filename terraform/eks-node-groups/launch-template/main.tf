@@ -88,14 +88,14 @@ resource "aws_launch_template" "this" {
   }
 
 
-  cpu_options {
-    core_count       = try(var.cpu_options.cpu_options.value.core_count, null)
-    threads_per_core = try(var.cpu_options.threads_per_core, null)
-  }
+  #cpu_options {
+  #  core_count       = try(var.cpu_options.cpu_options.value.core_count, null)
+  #  threads_per_core = try(var.cpu_options.threads_per_core, null)
+  #}
 
-  credit_specification {
-    cpu_credits = try(var.credit_specification.cpu_credits, null)
-  }
+  #credit_specification {
+  #  cpu_credits = try(var.credit_specification.cpu_credits, null)
+  #}
 
   default_version         = var.launch_template_default_version
   description             = var.launch_template_description
@@ -124,17 +124,17 @@ resource "aws_launch_template" "this" {
   }
 
 
-  instance_market_options {
-    market_type = try(var.instance_market_options.market_type, null)
+  #instance_market_options {
+  #  market_type = try(var.instance_market_options.market_type, null)
 
-    spot_options {
-      block_duration_minutes         = try(var.instance_market_options.spot_options.block_duration_minutes, null)
-      instance_interruption_behavior = try(var.instance_market_options.spot_options.instance_interruption_behavior, null)
-      max_price                      = try(var.instance_market_options.spot_options.max_price, null)
-      spot_instance_type             = try(var.instance_market_options.spot_options.spot_instance_type, null)
-      valid_until                    = try(var.instance_market_options.spot_options.valid_until, null)
-    }
-  }
+  #  spot_options {
+  #    block_duration_minutes         = try(var.instance_market_options.spot_options.block_duration_minutes, null)
+  #    instance_interruption_behavior = try(var.instance_market_options.spot_options.instance_interruption_behavior, null)
+  #    max_price                      = try(var.instance_market_options.spot_options.max_price, null)
+  #    spot_instance_type             = try(var.instance_market_options.spot_options.spot_instance_type, null)
+  #    valid_until                    = try(var.instance_market_options.spot_options.valid_until, null)
+  #  }
+  #}
 
   # # Set on node group instead
   # instance_type = var.launch_template_instance_type
@@ -150,63 +150,63 @@ resource "aws_launch_template" "this" {
   }
 
 
-  metadata_options {
-    http_endpoint               = try(var.metadata_options.http_endpoint, null)
-    http_protocol_ipv6          = try(var.metadata_options.http_protocol_ipv6, null)
-    http_put_response_hop_limit = try(var.metadata_options.http_put_response_hop_limit, null)
-    http_tokens                 = try(var.metadata_options.http_tokens, null)
-  }
+  #metadata_options {
+  #  http_endpoint               = try(var.metadata_options.http_endpoint, null)
+  #  http_protocol_ipv6          = try(var.metadata_options.http_protocol_ipv6, null)
+  #  http_put_response_hop_limit = try(var.metadata_options.http_put_response_hop_limit, null)
+  #  http_tokens                 = try(var.metadata_options.http_tokens, null)
+  #}
 
-  monitoring {
-    enabled = var.enable_monitoring
-  }
-
-
-  dynamic "network_interfaces" {
-    for_each = var.network_interfaces
-    content {
-      associate_carrier_ip_address = try(each.value.associate_carrier_ip_address, null)
-      associate_public_ip_address  = try(each.value.associate_public_ip_address, null)
-      delete_on_termination        = try(each.value.delete_on_termination, null)
-      description                  = try(each.value.description, null)
-      device_index                 = try(each.value.device_index, null)
-      interface_type               = try(each.value.interface_type, null)
-      ipv4_address_count           = try(each.value.ipv4_address_count, null)
-      ipv4_addresses               = try(each.value.ipv4_addresses, [])
-      ipv6_address_count           = try(each.value.ipv6_address_count, null)
-      ipv6_addresses               = try(each.value.ipv6_addresses, [])
-      network_interface_id         = try(each.value.network_interface_id, null)
-      private_ip_address           = try(each.value.private_ip_address, null)
-      # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/4570
-      security_groups = compact(concat(try(network_interfaces.value.security_groups, []), local.security_group_ids))
-      # Set on EKS managed node group, will fail if set here
-      # https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html#launch-template-basics
-      # subnet_id       = try(network_interfaces.value.subnet_id, null)
-    }
-  }
-
-  placement {
-    affinity                = try(var.placement.affinity, null)
-    availability_zone       = try(var.placement.availability_zone, null)
-    group_name              = try(var.placement.group_name, null)
-    host_id                 = try(var.placement.host_id, null)
-    host_resource_group_arn = try(var.placement.host_resource_group_arn, null)
-    partition_number        = try(var.placement.partition_number, null)
-    spread_domain           = try(var.placement.spread_domain, null)
-    tenancy                 = try(var.placement.tenancy, null)
-  }
+  #monitoring {
+  #  enabled = var.enable_monitoring
+  #}
 
 
-  ram_disk_id = var.ram_disk_id
+  #dynamic "network_interfaces" {
+  #  for_each = var.network_interfaces
+  #  content {
+  #    associate_carrier_ip_address = try(each.value.associate_carrier_ip_address, null)
+  #    associate_public_ip_address  = try(each.value.associate_public_ip_address, null)
+  #    delete_on_termination        = try(each.value.delete_on_termination, null)
+  #    description                  = try(each.value.description, null)
+  #    device_index                 = try(each.value.device_index, null)
+  #    interface_type               = try(each.value.interface_type, null)
+  #    ipv4_address_count           = try(each.value.ipv4_address_count, null)
+  #    ipv4_addresses               = try(each.value.ipv4_addresses, [])
+  #    ipv6_address_count           = try(each.value.ipv6_address_count, null)
+  #    ipv6_addresses               = try(each.value.ipv6_addresses, [])
+  #    network_interface_id         = try(each.value.network_interface_id, null)
+  #    private_ip_address           = try(each.value.private_ip_address, null)
+  #    # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/4570
+  #    security_groups = compact(concat(try(network_interfaces.value.security_groups, []), local.security_group_ids))
+  #    # Set on EKS managed node group, will fail if set here
+  #    # https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html#launch-template-basics
+  #    # subnet_id       = try(network_interfaces.value.subnet_id, null)
+  #  }
+  #}
 
-  dynamic "tag_specifications" {
-    for_each = toset(var.tag_specifications)
+  #placement {
+  #  affinity                = try(var.placement.affinity, null)
+  #  availability_zone       = try(var.placement.availability_zone, null)
+  #  group_name              = try(var.placement.group_name, null)
+  #  host_id                 = try(var.placement.host_id, null)
+  #  host_resource_group_arn = try(var.placement.host_resource_group_arn, null)
+  #  partition_number        = try(var.placement.partition_number, null)
+  #  spread_domain           = try(var.placement.spread_domain, null)
+  #  tenancy                 = try(var.placement.tenancy, null)
+  #}
 
-    content {
-      resource_type = tag_specifications.key
-      tags          = merge(var.tags, { Name = var.name }, var.launch_template_tags)
-    }
-  }
+
+  #ram_disk_id = var.ram_disk_id
+
+  #dynamic "tag_specifications" {
+  #  for_each = toset(var.tag_specifications)
+
+  #  content {
+  #    resource_type = tag_specifications.key
+  #    tags          = merge(var.tags, { Name = var.name }, var.launch_template_tags)
+  #  }
+  #}
 
   update_default_version = var.update_launch_template_default_version
   vpc_security_group_ids = length(var.network_interfaces) > 0 ? [] : local.security_group_ids
