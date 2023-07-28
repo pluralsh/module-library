@@ -31,9 +31,12 @@ module "user_data" {
   #source = "../user_data"
   source = "github.com/pluralsh/module-library//terraform/eks-node-groups/user-data?ref=feat-ubuntu-ng"
 
-  cluster_name        = var.cluster_name
-  cluster_endpoint    = try(var.cluster_endpoint, data.aws_eks_cluster.this.endpoint)
-  cluster_auth_base64 = try(var.cluster_auth_base64, data.aws_eks_cluster.this.certificate_authority[0].data)
+  cluster_name = var.cluster_name
+
+  #cluster_endpoint    = try(var.cluster_endpoint, data.aws_eks_cluster.this.endpoint)
+  #cluster_auth_base64 = try(var.cluster_auth_base64, data.aws_eks_cluster.this.certificate_authority[0].data)
+  cluster_endpoint    = data.aws_eks_cluster.this.endpoint
+  cluster_auth_base64 = data.aws_eks_cluster.this.certificate_authority[0].data
 
   cluster_service_ipv4_cidr = try(var.cluster_service_ipv4_cidr, data.aws_eks_cluster.this.kubernetes_network_config[0].service_ipv4_cidr)
 
