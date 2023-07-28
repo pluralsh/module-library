@@ -53,7 +53,7 @@ module "user_data" {
         try(var.kubelet_extra_args["--register-with-taints"], []),
         [for t in var.k8s_taints : format("%s=%s:%s", t.key, t.value, t.effect)]
       ))
-    } : {}
+    } : ""
   )
   bootstrap_extra_args    = var.bootstrap_extra_args
   user_data_template_path = var.user_data_template_path
