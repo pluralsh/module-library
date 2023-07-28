@@ -209,13 +209,13 @@ variable "cluster_name" {
 variable "cluster_endpoint" {
   description = "Endpoint of associated EKS cluster"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "cluster_auth_base64" {
   description = "Base64 encoded CA of associated EKS cluster"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "cluster_service_ipv4_cidr" {
