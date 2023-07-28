@@ -33,20 +33,19 @@ resource "aws_eks_node_group" "workers" {
 
   # TODO: this needs to be changed to use the launch template module
 
-  #dynamic "launch_template" {
-  #  for_each = each.value["launch_template_id"] != null ? [{
-  #    id      = each.value["launch_template_id"]
-  #    version = each.value["launch_template_version"]
-  #  }] : []
+  dynamic "launch_template" {
+    for_each = each.value["launch_template_id"] != null ? [{
+      id      = each.value["launch_template_id"]
+      version = each.value["launch_template_version"]
+      }] : [{
+      id      = module.launch_templates[each.key].launch_template_id
+      version = module.launch_templates[each.key].launch_template_latest_version
+    }]
 
-  #  content {
-  #    id      = launch_template.value["id"]
-  #    version = launch_template.value["version"]
-  #  }
-  #}
-  launch_template {
-    id      = try(each.value.launch_template_id, try(module.launch_templates[each.key].launch_template_id, null))
-    version = try(each.value.launch_template_version, try(module.launch_templates[each.key].launch_template_latest_version, null))
+    content {
+      id      = launch_template.value["id"]
+      version = launch_template.value["version"]
+    }
   }
 
   version = lookup(each.value, "version", null)
