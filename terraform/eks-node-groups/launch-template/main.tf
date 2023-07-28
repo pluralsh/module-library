@@ -1,7 +1,6 @@
 locals {
-  launch_template_name = var.launch_template_name
-  security_group_ids   = compact(concat([var.cluster_primary_security_group_id], var.vpc_security_group_ids))
-  has_taints           = length(var.k8s_taints) > 0 || length(try(var.kubelet_extra_args["--register-with-taints"], [])) > 0
+  security_group_ids = compact(concat([var.cluster_primary_security_group_id], var.vpc_security_group_ids))
+  has_taints         = length(var.k8s_taints) > 0 || length(try(var.kubelet_extra_args["--register-with-taints"], [])) > 0
 }
 
 data "aws_ami" "ami" {
@@ -33,18 +32,16 @@ module "user_data" {
 
   cluster_name = var.cluster_name
 
-  #cluster_endpoint    = try(var.cluster_endpoint, data.aws_eks_cluster.this.endpoint)
-  #cluster_auth_base64 = try(var.cluster_auth_base64, data.aws_eks_cluster.this.certificate_authority[0].data)
-  cluster_endpoint    = data.aws_eks_cluster.this.endpoint
-  cluster_auth_base64 = data.aws_eks_cluster.this.certificate_authority[0].data
+  cluster_endpoint    = coalesce(var.cluster_endpoint, data.aws_eks_cluster.this.endpoint)
+  cluster_auth_base64 = coalesce(var.cluster_auth_base64, data.aws_eks_cluster.this.certificate_authority[0].data)
 
-  cluster_service_ipv4_cidr = try(var.cluster_service_ipv4_cidr, data.aws_eks_cluster.this.kubernetes_network_config[0].service_ipv4_cidr)
+  cluster_service_ipv4_cidr = coalesce(var.cluster_service_ipv4_cidr, data.aws_eks_cluster.this.kubernetes_network_config[0].service_ipv4_cidr)
 
   enable_bootstrap_user_data = var.enable_bootstrap_user_data
   pre_bootstrap_user_data    = var.pre_bootstrap_user_data
   post_bootstrap_user_data   = var.post_bootstrap_user_data
   kubelet_extra_args = merge(
-    try(var.kubelet_extra_args, {}), # --node-labels and --register-with-taints are overwritten in this merge but handled seperately below
+    var.kubelet_extra_args, # --node-labels and --register-with-taints are overwritten in this merge but handled seperately below
     {
       "--node-labels" = join(",", concat(
         ["eks.amazonaws.com/nodegroup-image=${data.aws_ami.ami.id}"],
@@ -67,7 +64,7 @@ resource "aws_launch_template" "this" {
   name        = var.launch_template_use_name_prefix ? null : local.launch_template_name
   name_prefix = var.launch_template_use_name_prefix ? "${local.launch_template_name}-" : null
 
-  image_id  = var.ami_id != "" ? var.ami_id : data.aws_ami.ami.id
+  image_id  = coalesce(var.ami_id, data.aws_ami.ami.id)
   user_data = module.user_data.user_data
 
   # TODO: most of these try statements are probably unnecessary, because they are already set to default null in the variables
