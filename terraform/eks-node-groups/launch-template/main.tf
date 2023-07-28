@@ -48,12 +48,12 @@ module "user_data" {
         try(var.kubelet_extra_args["--node-labels"], []),
         [for k, v in var.k8s_labels : format("%s=%s", k, v)]
     )) },
-    local.has_taints ? {
+    {
       "--register-with-taints" = join(",", concat(
         try(var.kubelet_extra_args["--register-with-taints"], []),
         [for t in var.k8s_taints : format("%s=%s:%s", t.key, t.value, t.effect)]
       ))
-    } : ""
+    }
   )
   bootstrap_extra_args    = var.bootstrap_extra_args
   user_data_template_path = var.user_data_template_path
