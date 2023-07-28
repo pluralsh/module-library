@@ -14,19 +14,16 @@ variable "is_eks_managed_node_group" {
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
-  default     = ""
 }
 
 variable "cluster_endpoint" {
   description = "Endpoint of associated EKS cluster"
   type        = string
-  default     = ""
 }
 
 variable "cluster_auth_base64" {
   description = "Base64 encoded CA of associated EKS cluster"
   type        = string
-  default     = ""
 }
 
 variable "cluster_service_ipv4_cidr" {
