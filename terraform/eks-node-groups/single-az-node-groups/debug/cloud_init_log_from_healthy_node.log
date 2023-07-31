@@ -1,0 +1,49 @@
+[root@ip-10-0-54-200 log]# cat /var/log/cloud-init-output.log 
+Cloud-init v. 19.3-46.amzn2 running 'init-local' at Sat, 29 Jul 2023 00:07:04 +0000. Up 10.42 seconds.
+Cloud-init v. 19.3-46.amzn2 running 'init' at Sat, 29 Jul 2023 00:07:05 +0000. Up 11.94 seconds.
+ci-info: ++++++++++++++++++++++++++++++++++++++Net device info+++++++++++++++++++++++++++++++++++++++
+ci-info: +--------+------+-----------------------------+---------------+--------+-------------------+
+ci-info: | Device |  Up  |           Address           |      Mask     | Scope  |     Hw-Address    |
+ci-info: +--------+------+-----------------------------+---------------+--------+-------------------+
+ci-info: |  eth0  | True |         10.0.54.200         | 255.255.240.0 | global | 0a:0a:6d:d0:31:95 |
+ci-info: |  eth0  | True | fe80::80a:6dff:fed0:3195/64 |       .       |  link  | 0a:0a:6d:d0:31:95 |
+ci-info: |   lo   | True |          127.0.0.1          |   255.0.0.0   |  host  |         .         |
+ci-info: |   lo   | True |           ::1/128           |       .       |  host  |         .         |
+ci-info: +--------+------+-----------------------------+---------------+--------+-------------------+
+ci-info: +++++++++++++++++++++++++++++++Route IPv4 info+++++++++++++++++++++++++++++++
+ci-info: +-------+-----------------+-----------+-----------------+-----------+-------+
+ci-info: | Route |   Destination   |  Gateway  |     Genmask     | Interface | Flags |
+ci-info: +-------+-----------------+-----------+-----------------+-----------+-------+
+ci-info: |   0   |     0.0.0.0     | 10.0.48.1 |     0.0.0.0     |    eth0   |   UG  |
+ci-info: |   1   |    10.0.48.0    |  0.0.0.0  |  255.255.240.0  |    eth0   |   U   |
+ci-info: |   2   | 169.254.169.254 |  0.0.0.0  | 255.255.255.255 |    eth0   |   UH  |
+ci-info: +-------+-----------------+-----------+-----------------+-----------+-------+
+ci-info: +++++++++++++++++++Route IPv6 info+++++++++++++++++++
+ci-info: +-------+-------------+---------+-----------+-------+
+ci-info: | Route | Destination | Gateway | Interface | Flags |
+ci-info: +-------+-------------+---------+-----------+-------+
+ci-info: |   9   |  fe80::/64  |    ::   |    eth0   |   U   |
+ci-info: |   11  |    local    |    ::   |    eth0   |   U   |
+ci-info: |   12  |  multicast  |    ::   |    eth0   |   U   |
+ci-info: +-------+-------------+---------+-----------+-------+
+Cloud-init v. 19.3-46.amzn2 running 'modules:config' at Sat, 29 Jul 2023 00:07:07 +0000. Up 14.09 seconds.
+Cloud-init v. 19.3-46.amzn2 running 'modules:final' at Sat, 29 Jul 2023 00:07:08 +0000. Up 14.72 seconds.
++ B64_CLUSTER_CA=LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1URXdPREUwTkRnd00xb1hEVE15TVRFd05URTBORGd3TTFvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBUFJvCjVSamR1dkFxLzZHVHZRR3JGUlh5K2F0SFZmMVZCTFg3bzRQTVNqU2p3WUFwcHlzakJlMWg1NzM1MjV3S0JjYmMKejZNaGZKT2syOHk4OHR2TEFBdmpSRG83NTJOU0QwSzZkZThsclRlSUkzUzdZY053R1NUQnM1WStuZ0JINk04awp3d3pYWEozY253S1ZoVWlUWlR2TDV6RTd5dzl0Q21sS1NnR054bnhzYjhTV2E5VUNtTEkrUGhTVnl0bXNocEJDCjF5UUxkZ29NSEtOSU1uNjhqUERadFVtRjl3c1pHMjJtaHYvSjFhSlBTak8vS1QrMFNHdFFuQ0RSVTBITVhiekoKSnRKSHFsWndCWGR5dXNLRmJMOVA0RlFJK2FuT1kwenIva1JKdCt5ZDRlSC9maWFOQjU1R2I5ZGVKY3VtSGphQgprS2dud1NtZFh1S2tLY2FtT25jQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZFMXpnc3owa20rVVNsdlBtN25UMXl2d0E1bFFNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFBNUlCbzBjNEFlOUk3cCs4MExiR3hqSzhMZUdIMEtNTEwyUVJOMUtjbU8rZ3k3YmdmYgpyRE51K3VQQjRuV0IrRUUxN1dXSElkaW1CaTRCdE5GYXhrMGVhajdxdUVwbXVqTGt4R1hIQlBTdHl2UHdEZFpxClFFRnFNcGhQMDNtWHIwN2k2d3VZNUljanZlYmcyT25EZGxZS3NrRkRFUkR1ZWlMTFBZWnhRZk8yWW03ZlRNV2oKRS8rSGhSdHdVTGliQlpXWWF6SDZ6bUR2TVNuQnUrMEZvOEluWkVPU1phTDd5MElXVEZ2QU5TeU9TbmZkQ21KUAphQ3FwbjFCM2d3bjFvempSeG42UEhqaDdKak5rWi9VM3JoOGdBdHJZT1Z1cGZ4cXR0ZDE5OHRJTEl5bU1KdlFoCkQzUjVtUmo3bjBvNVdrQ1N1TFFkRGI5VVYrdUYzemlMVmlBawotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
++ API_SERVER_URL=https://28360449CE771DB6EDA54FD0447940E5.gr7.us-east-2.eks.amazonaws.com
++ K8S_CLUSTER_DNS_IP=172.20.0.10
++ /etc/eks/bootstrap.sh pluraldev --kubelet-extra-args '--node-labels=plural.sh/scalingGroup=small-burst-on-demand,eks.amazonaws.com/nodegroup-image=ami-06e419adf17ca9a26,eks.amazonaws.com/capacityType=ON_DEMAND,plural.sh/capacityType=ON_DEMAND,eks.amazonaws.com/nodegroup=small-burst-on-demand-us-east-2c-subnet-09231904575210d72,topology.ebs.csi.aws.com/zone=us-east-2c,plural.sh/performanceType=BURST --max-pods=35' --b64-cluster-ca LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1URXdPREUwTkRnd00xb1hEVE15TVRFd05URTBORGd3TTFvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBUFJvCjVSamR1dkFxLzZHVHZRR3JGUlh5K2F0SFZmMVZCTFg3bzRQTVNqU2p3WUFwcHlzakJlMWg1NzM1MjV3S0JjYmMKejZNaGZKT2syOHk4OHR2TEFBdmpSRG83NTJOU0QwSzZkZThsclRlSUkzUzdZY053R1NUQnM1WStuZ0JINk04awp3d3pYWEozY253S1ZoVWlUWlR2TDV6RTd5dzl0Q21sS1NnR054bnhzYjhTV2E5VUNtTEkrUGhTVnl0bXNocEJDCjF5UUxkZ29NSEtOSU1uNjhqUERadFVtRjl3c1pHMjJtaHYvSjFhSlBTak8vS1QrMFNHdFFuQ0RSVTBITVhiekoKSnRKSHFsWndCWGR5dXNLRmJMOVA0RlFJK2FuT1kwenIva1JKdCt5ZDRlSC9maWFOQjU1R2I5ZGVKY3VtSGphQgprS2dud1NtZFh1S2tLY2FtT25jQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZFMXpnc3owa20rVVNsdlBtN25UMXl2d0E1bFFNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFBNUlCbzBjNEFlOUk3cCs4MExiR3hqSzhMZUdIMEtNTEwyUVJOMUtjbU8rZ3k3YmdmYgpyRE51K3VQQjRuV0IrRUUxN1dXSElkaW1CaTRCdE5GYXhrMGVhajdxdUVwbXVqTGt4R1hIQlBTdHl2UHdEZFpxClFFRnFNcGhQMDNtWHIwN2k2d3VZNUljanZlYmcyT25EZGxZS3NrRkRFUkR1ZWlMTFBZWnhRZk8yWW03ZlRNV2oKRS8rSGhSdHdVTGliQlpXWWF6SDZ6bUR2TVNuQnUrMEZvOEluWkVPU1phTDd5MElXVEZ2QU5TeU9TbmZkQ21KUAphQ3FwbjFCM2d3bjFvempSeG42UEhqaDdKak5rWi9VM3JoOGdBdHJZT1Z1cGZ4cXR0ZDE5OHRJTEl5bU1KdlFoCkQzUjVtUmo3bjBvNVdrQ1N1TFFkRGI5VVYrdUYzemlMVmlBawotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg== --apiserver-endpoint https://28360449CE771DB6EDA54FD0447940E5.gr7.us-east-2.eks.amazonaws.com --dns-cluster-ip 172.20.0.10 --use-max-pods false
+I0729 00:07:10.670214    2525 exclusion.go:84] No environment variable set, using default exclusion rules
+E0729 00:07:10.673766    2525 exclusion.go:94] Invalid webhook admission exclusion rule, scope not set
+E0729 00:07:10.674864    2525 exclusion.go:94] Invalid webhook admission exclusion rule, scope not set
+Using kubelet version 1.23.16
+false
+true
+Using dockerd as the container runtime
+true
+‘/etc/eks/iptables-restore.service’ -> ‘/etc/systemd/system/iptables-restore.service’
+Created symlink from /etc/systemd/system/multi-user.target.wants/iptables-restore.service to /etc/systemd/system/iptables-restore.service.
+Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
+Created symlink from /etc/systemd/system/multi-user.target.wants/kubelet.service to /etc/systemd/system/kubelet.service.
+nvidia-smi not found
+ci-info: no authorized ssh keys fingerprints found for user ec2-user.
+Cloud-init v. 19.3-46.amzn2 finished at Sat, 29 Jul 2023 00:07:24 +0000. Datasource DataSourceEc2.  Up 30.84 seconds
