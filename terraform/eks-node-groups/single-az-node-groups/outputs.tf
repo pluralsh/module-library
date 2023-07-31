@@ -12,3 +12,15 @@ output "aws_auth_roles" {
     }
   ]
 }
+
+output "ng_merged" {
+  value = local.node_groups_merged
+}
+
+output "ng_temp" {
+  value = local.node_groups_temp
+}
+
+output "ng_expanded" {
+  value = local.node_groups_expanded
+}
