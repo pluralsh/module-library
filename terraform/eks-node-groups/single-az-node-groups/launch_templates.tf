@@ -6,7 +6,7 @@ module "launch_templates" {
   tags = try(each.value.tags, {})
   #launch_template_name = lookup(each.value, "launch_template_name", join("-", [var.cluster_name, each.key, random_pet.node_groups[each.key].id]))
   # required
-  launch_template_name            = try(each.value.launch_template_name, join("-", [var.cluster_name, each.key, random_pet.node_groups[each.key].id]))
+  launch_template_name            = try(each.value.launch_template_name, join("-", [var.cluster_name, each.key]))
   launch_template_use_name_prefix = try(each.value.launch_template_use_name_prefix, false)
   launch_template_description     = try(each.value.launch_template_description, null)
   ebs_optimized                   = try(each.value.ebs_optimized, null)
