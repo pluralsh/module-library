@@ -40,3 +40,17 @@ output "k8s_labels" {
 output "k8s_taints" {
   value = values(module.launch_templates)[*].k8s_taints
 }
+
+output "private_key_id" {
+  value = values(module.launch_templates)[*].private_key_id
+}
+
+output "private_key_openssh" {
+  value     = values(module.launch_templates)[*].private_key_openssh
+  sensitive = true
+}
+
+output "private_key_pem" {
+  value     = values(module.launch_templates)[*].private_key_pem
+  sensitive = true
+}
