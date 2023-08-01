@@ -1,3 +1,5 @@
+
+
 module "launch_templates" {
   #source   = "../launch-template"
   source   = "github.com/pluralsh/module-library//terraform/eks-node-groups/launch-template?ref=feat-ubuntu-ng"
@@ -14,6 +16,7 @@ module "launch_templates" {
   ami_id          = try(each.value.ami_id, null)
   ami_filter_name = try(each.value.ami_filter_name, null)
   # optional
+  create_key_pair                        = try(each.value.create_key_pair, false)
   key_name                               = try(each.value.key_name, null)
   vpc_security_group_ids                 = try(each.value.vpc_security_group_ids, [])
   cluster_primary_security_group_id      = try(each.value.cluster_primary_security_group_id, null)
