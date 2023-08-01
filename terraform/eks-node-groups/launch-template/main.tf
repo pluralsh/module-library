@@ -25,15 +25,20 @@ data "aws_eks_cluster" "this" {
   name = var.cluster_name
 }
 
-module "key_pair" {
-  source = "terraform-aws-modules/key-pair/aws"
-  count  = var.create_key_pair ? 1 : 0
-  #version = "~> 2.0"
+resource "aws_key_pair" "this" {
+  count = var.create ? 1 : 0
 
   key_name_prefix = var.launch_template_name
+  public_key      = trimspace(tls_private_key.this[0].public_key_openssh)
 
-  create_private_key = true
+  tags = var.tags
+}
 
+resource "tls_private_key" "this" {
+  count = var.create_key_pair ? 1 : 0
+
+  algorithm = "RSA"
+  rsa_bits  = 4096
 }
 
 
@@ -133,7 +138,7 @@ resource "aws_launch_template" "this" {
   # # Set on node group instead
   # instance_type = var.launch_template_instance_type
   kernel_id = var.kernel_id
-  key_name  = var.create_key_pair ? module.key_pair[0].key_name : var.key_name
+  key_name  = var.create_key_pair ? aws_key_pair.this[0].key_name : var.key_name
 
   dynamic "license_specification" {
     for_each = length(var.license_specifications) > 0 ? var.license_specifications : {}
