@@ -57,6 +57,8 @@ module "user_data" {
     {
       "--node-labels" = join(",", concat(
         ["eks.amazonaws.com/nodegroup-image=${data.aws_ami.ami.id}"],
+        # TODO: I have a problem if this label needs to be passed in as a variable, because it would mean to have one launch template for each single az node group
+        #["eks.amazonaws.com/nodegroup=small-burst-on-demand-us-east-2c-subnet-09231904575210d72"],
         try(var.kubelet_extra_args["--node-labels"], []),
         [for k, v in var.k8s_labels : format("%s=%s", k, v)]
     )) },
