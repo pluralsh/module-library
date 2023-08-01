@@ -29,7 +29,8 @@ resource "aws_key_pair" "this" {
   count = var.create_key_pair ? 1 : 0
 
   key_name_prefix = var.launch_template_name
-  public_key      = trimspace(tls_private_key.this[0].public_key_openssh)
+  #public_key      = trimspace(tls_private_key.this[0].public_key_openssh)
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFUvl5clm3cGh7k3ItY7JkFNWhUHqbBrxPMbqejikFADc26NBq4wmsz4cZxVroKf8J3HMhJpjDbJk0w+q43R50ndDjiJ91Y3zX7EupxzgqOhPa4GZps0csGt8e5I9xz3xvGHtefHxl7minU8Wm9CKg0GBRv3yLaan1VLn5WLqooCo6qt/PHI01oERLQeE3qdT5m3kmRZ7wSBqGQBMHfeNDvXFRVkURQ+7Ak+93TuuL/fISpjHk4P+ALbbyqXwUid7g8UgyeWBJTwOQxUSyNrJ6zn1sYq7doXHx41MZiH4RvCUmQCtp9PBgN4PwjgHOQ8/Zyk6Syaf5LtWXlqeXrJCH"
 
   tags = var.tags
 }
