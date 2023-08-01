@@ -25,7 +25,7 @@ variable "launch_template_description" {
 variable "ebs_optimized" {
   description = "If true, the launched EC2 instance(s) will be EBS-optimized"
   type        = bool
-  default     = null
+  default     = false
 }
 
 variable "ami_filter_name" {
@@ -73,7 +73,7 @@ variable "update_launch_template_default_version" {
 variable "disable_api_termination" {
   description = "If true, enables EC2 instance termination protection"
   type        = bool
-  default     = null
+  default     = false
 }
 
 variable "kernel_id" {
