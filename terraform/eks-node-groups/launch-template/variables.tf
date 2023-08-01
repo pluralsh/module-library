@@ -265,3 +265,9 @@ variable "user_data_template_path" {
   type        = string
   default     = ""
 }
+
+variable "create_key_pair" {
+  description = "Determines whether to create a key pair for the launch template for ssh access to the instance(s)"
+  type        = bool
+  default     = false
+}
