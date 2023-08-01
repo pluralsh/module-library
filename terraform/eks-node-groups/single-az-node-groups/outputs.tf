@@ -24,3 +24,19 @@ output "ng_temp" {
 output "ng_expanded" {
   value = local.node_groups_expanded
 }
+
+output "user_data_kubelet_extra_args" {
+  value = module.launch_templates[*].user_data_kubelet_extra_args
+}
+
+output "kubelet_extra_args" {
+  value = module.launch_templates[*].kubelet_extra_args
+}
+
+output "k8s_labels" {
+  value = module.launch_templates[*].k8s_labels
+}
+
+output "k8s_taints" {
+  value = module.launch_templates[*].k8s_taints
+}
