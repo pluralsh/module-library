@@ -26,7 +26,7 @@ data "aws_eks_cluster" "this" {
 }
 
 resource "aws_key_pair" "this" {
-  count = var.create ? 1 : 0
+  count = var.create_key_pair ? 1 : 0
 
   key_name_prefix = var.launch_template_name
   public_key      = trimspace(tls_private_key.this[0].public_key_openssh)
