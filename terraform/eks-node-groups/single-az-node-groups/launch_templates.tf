@@ -9,7 +9,7 @@ module "launch_templates" {
   launch_template_name            = try(each.value.launch_template_name, join("-", [var.cluster_name, each.key]))
   launch_template_use_name_prefix = try(each.value.launch_template_use_name_prefix, false)
   launch_template_description     = try(each.value.launch_template_description, null)
-  ebs_optimized                   = try(each.value.ebs_optimized, null)
+  ebs_optimized                   = try(each.value.ebs_optimized, false)
   # one of the following must be specified
   ami_id          = try(each.value.ami_id, null)
   ami_filter_name = try(each.value.ami_filter_name, null)
@@ -33,7 +33,7 @@ module "launch_templates" {
   maintenance_options                    = try(each.value.maintenance_options, {})
   license_specifications                 = try(each.value.license_specifications, {})
   metadata_options                       = try(each.value.metadata_options, {})
-  enable_monitoring                      = try(each.value.enable_monitoring, null)
+  enable_monitoring                      = try(each.value.enable_monitoring, false)
   network_interfaces                     = try(each.value.network_interfaces, [])
   placement                              = try(each.value.placement, {})
   private_dns_name_options               = try(each.value.private_dns_name_options, {})
@@ -50,7 +50,7 @@ module "launch_templates" {
   post_bootstrap_user_data  = try(each.value.post_bootstrap_user_data, "")
   bootstrap_extra_args      = try(each.value.bootstrap_extra_args, "")
   kubelet_extra_args        = try(each.value.kubelet_extra_args, {})
-  k8s_labels                = merge(try(local.node_groups_expanded[each.key]["k8s_labels"], {}), try(each.value.k8s_labels, {}))
-  k8s_taints                = concat(try(local.node_groups_expanded[each.key]["k8s_taints"], []), try(each.value.k8s_taints, []))
+  k8s_labels                = merge(local.node_groups_merged[each.key]["k8s_labels"], try(each.value.k8s_labels, {}))
+  k8s_taints                = concat(local.node_groups_merged[each.key]["k8s_taints"], try(each.value.k8s_taints, []))
   depends_on                = [random_pet.node_groups]
 }
