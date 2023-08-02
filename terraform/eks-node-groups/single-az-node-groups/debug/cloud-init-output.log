@@ -1,0 +1,134 @@
+ubuntu@ip-10-0-20-161:~$ cat /var/log/cloud-init-output.log
+Cloud-init v. 23.2.1-0ubuntu0~20.04.2 running 'init-local' at Tue, 01 Aug 2023 17:41:59 +0000. Up 13.27 seconds.
+Cloud-init v. 23.2.1-0ubuntu0~20.04.2 running 'init' at Tue, 01 Aug 2023 17:42:03 +0000. Up 17.21 seconds.
+ci-info: +++++++++++++++++++++++++++++++++++++Net device info++++++++++++++++++++++++++++++++++++++
+ci-info: +--------+------+---------------------------+---------------+--------+-------------------+
+ci-info: | Device |  Up  |          Address          |      Mask     | Scope  |     Hw-Address    |
+ci-info: +--------+------+---------------------------+---------------+--------+-------------------+
+ci-info: |  ens5  | True |        10.0.20.161        | 255.255.240.0 | global | 02:e6:09:e4:d4:d3 |
+ci-info: |  ens5  | True | fe80::e6:9ff:fee4:d4d3/64 |       .       |  link  | 02:e6:09:e4:d4:d3 |
+ci-info: |   lo   | True |         127.0.0.1         |   255.0.0.0   |  host  |         .         |
+ci-info: |   lo   | True |          ::1/128          |       .       |  host  |         .         |
+ci-info: +--------+------+---------------------------+---------------+--------+-------------------+
+ci-info: +++++++++++++++++++++++++++++Route IPv4 info+++++++++++++++++++++++++++++
+ci-info: +-------+-------------+-----------+-----------------+-----------+-------+
+ci-info: | Route | Destination |  Gateway  |     Genmask     | Interface | Flags |
+ci-info: +-------+-------------+-----------+-----------------+-----------+-------+
+ci-info: |   0   |   0.0.0.0   | 10.0.16.1 |     0.0.0.0     |    ens5   |   UG  |
+ci-info: |   1   |  10.0.16.0  |  0.0.0.0  |  255.255.240.0  |    ens5   |   U   |
+ci-info: |   2   |  10.0.16.1  |  0.0.0.0  | 255.255.255.255 |    ens5   |   UH  |
+ci-info: +-------+-------------+-----------+-----------------+-----------+-------+
+ci-info: +++++++++++++++++++Route IPv6 info+++++++++++++++++++
+ci-info: +-------+-------------+---------+-----------+-------+
+ci-info: | Route | Destination | Gateway | Interface | Flags |
+ci-info: +-------+-------------+---------+-----------+-------+
+ci-info: |   1   |  fe80::/64  |    ::   |    ens5   |   U   |
+ci-info: |   3   |    local    |    ::   |    ens5   |   U   |
+ci-info: |   4   |  multicast  |    ::   |    ens5   |   U   |
+ci-info: +-------+-------------+---------+-----------+-------+
+Generating public/private rsa key pair.
+Your identification has been saved in /etc/ssh/ssh_host_rsa_key
+Your public key has been saved in /etc/ssh/ssh_host_rsa_key.pub
+The key fingerprint is:
+SHA256:PAtAhjY01zqFJNo4SJluSQIgCkwxoxE7mT7oN1nNGW8 root@ip-10-0-20-161
+The key's randomart image is:
++---[RSA 3072]----+
+|%OBo=o           |
+|O&**. o          |
+|/.o..o .         |
+|o*  o.o.+        |
+|oo   o.+SE       |
+|. . o  ..o       |
+| . +    .        |
+|  . .            |
+|                 |
++----[SHA256]-----+
+Generating public/private dsa key pair.
+Your identification has been saved in /etc/ssh/ssh_host_dsa_key
+Your public key has been saved in /etc/ssh/ssh_host_dsa_key.pub
+The key fingerprint is:
+SHA256:d4UKWNZHJfEk9x9emZ0+TCe9EgRpZJVpJOJx78mQftM root@ip-10-0-20-161
+The key's randomart image is:
++---[DSA 1024]----+
+|        o+.BX**  |
+|       +. *o*@ o=|
+|      . ...+oo+**|
+|         ...+.O.*|
+|        S o..B E.|
+|         . .. o .|
+|                 |
+|                 |
+|                 |
++----[SHA256]-----+
+Generating public/private ecdsa key pair.
+Your identification has been saved in /etc/ssh/ssh_host_ecdsa_key
+Your public key has been saved in /etc/ssh/ssh_host_ecdsa_key.pub
+The key fingerprint is:
+SHA256:zeArtbEoS8s/Gd5tfg8KnCXlz//i7prhZAdFSlrmCsE root@ip-10-0-20-161
+The key's randomart image is:
++---[ECDSA 256]---+
+|       ..   + .  |
+|        E. * o   |
+|        o o o .  |
+|       . B . .   |
+|        S * .    |
+|      .+ O o .   |
+|    o.o+B.  B .  |
+|   o ++...o=.*.  |
+|    +... oo.+**o.|
++----[SHA256]-----+
+Generating public/private ed25519 key pair.
+Your identification has been saved in /etc/ssh/ssh_host_ed25519_key
+Your public key has been saved in /etc/ssh/ssh_host_ed25519_key.pub
+The key fingerprint is:
+SHA256:GP7eCsS8/jqZfCmtLds6JoelzioD4cwUbrqVebJTNeI root@ip-10-0-20-161
+The key's randomart image is:
++--[ED25519 256]--+
+|                 |
+| .               |
+|. .   .          |
+|.+  .+oo         |
+|B. + o*.S        |
+|o+= E..o         |
+|.o = =o+..       |
+|+ o.+.@=+.       |
+| o.+o+*%*..      |
++----[SHA256]-----+
+Cloud-init v. 23.2.1-0ubuntu0~20.04.2 running 'modules:config' at Tue, 01 Aug 2023 17:42:14 +0000. Up 28.44 seconds.
+Using containerd as the container runtime
+Aliasing EKS k8s snap commands
+Added:
+  - kubelet-eks.kubelet as kubelet
+Added:
+  - kubectl-eks.kubectl as kubectl
+Stopping k8s daemons until configured
+Stopped.
+Cluster "kubernetes" set.
+Container runtime is containerd
+602401143452.dkr.ecr.us-east-2.amazonaws.com/eks/pause:3.5: resolving      |--------------------------------------| 
+elapsed: 0.1 s                                              total:   0.0 B (0.0 B/s)                                         
+602401143452.dkr.ecr.us-east-2.amazonaws.com/eks/pause:3.5:                    resolved       |++++++++++++++++++++++++++++++++++++++| 
+index-sha256:529cf6b1b6e5b76e901abc43aee825badbd93f9c5ee5f1e316d46a83abbce5a2: downloading    |++++++++++++++++++++++++++++++++++++++|  741.0 B/741.0 B 
+elapsed: 0.2 s                                                                 total:  741.0  (3.5 KiB/s)                                       
+602401143452.dkr.ecr.us-east-2.amazonaws.com/eks/pause:3.5:                       resolved       |++++++++++++++++++++++++++++++++++++++| 
+index-sha256:529cf6b1b6e5b76e901abc43aee825badbd93f9c5ee5f1e316d46a83abbce5a2:    done           |++++++++++++++++++++++++++++++++++++++| 
+manifest-sha256:666eebd093e91212426aeba3b89002911d2c981fefd8806b1a0ccb4f1b639a60: downloading    |--------------------------------------|    0.0 B/526.0 B 
+elapsed: 0.3 s                                                                    total:  741.0  (2.3 KiB/s)                                       
+602401143452.dkr.ecr.us-east-2.amazonaws.com/eks/pause:3.5:                       resolved       |++++++++++++++++++++++++++++++++++++++| 
+index-sha256:529cf6b1b6e5b76e901abc43aee825badbd93f9c5ee5f1e316d46a83abbce5a2:    done           |++++++++++++++++++++++++++++++++++++++| 
+manifest-sha256:666eebd093e91212426aeba3b89002911d2c981fefd8806b1a0ccb4f1b639a60: done           |++++++++++++++++++++++++++++++++++++++| 
+layer-sha256:0692f38991d53a0c28679148f99de26a44d630fda984b41f63c5e19f839d15a6:    downloading    |--------------------------------------|    0.0 B/289.6 KiB 
+config-sha256:6996f8da07bd405c6f82a549ef041deda57d1d658ec20a78584f9f436c9a3bb7:   done           |++++++++++++++++++++++++++++++++++++++| 
+elapsed: 0.4 s                                                                    total:  2.1 Ki (5.1 KiB/s)                                       
+602401143452.dkr.ecr.us-east-2.amazonaws.com/eks/pause:3.5:                       resolved       |++++++++++++++++++++++++++++++++++++++| 
+index-sha256:529cf6b1b6e5b76e901abc43aee825badbd93f9c5ee5f1e316d46a83abbce5a2:    done           |++++++++++++++++++++++++++++++++++++++| 
+manifest-sha256:666eebd093e91212426aeba3b89002911d2c981fefd8806b1a0ccb4f1b639a60: done           |++++++++++++++++++++++++++++++++++++++| 
+layer-sha256:0692f38991d53a0c28679148f99de26a44d630fda984b41f63c5e19f839d15a6:    done           |++++++++++++++++++++++++++++++++++++++| 
+config-sha256:6996f8da07bd405c6f82a549ef041deda57d1d658ec20a78584f9f436c9a3bb7:   done           |++++++++++++++++++++++++++++++++++++++| 
+elapsed: 0.5 s                                                                    total:  2.1 Ki (4.2 KiB/s)                                       
+Configuring kubelet snap
+Starting k8s kubelet daemon
+Started.
+All done
+Cloud-init v. 23.2.1-0ubuntu0~20.04.2 running 'modules:final' at Tue, 01 Aug 2023 17:42:15 +0000. Up 29.86 seconds.
+Cloud-init v. 23.2.1-0ubuntu0~20.04.2 finished at Tue, 01 Aug 2023 17:42:30 +0000. Datasource DataSourceEc2Local.  Up 44.29 seconds
