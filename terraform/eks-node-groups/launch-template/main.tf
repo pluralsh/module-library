@@ -71,7 +71,16 @@ module "user_data" {
     {
       "--register-with-taints" = join(",", concat(
         try(var.kubelet_extra_args["--register-with-taints"], []),
-        [for t in var.k8s_taints : format("%s=%s:%s", t.key, t.value, t.effect)]
+        [for t in var.k8s_taints :
+          format(
+            "%s=%s:%s",
+            t.key,
+            t.value,
+            #value = each.value.value != "" ? "${each.value.value}:${replace(title(replace(lower(each.value.effect), "_", " ")), " ", "")}" : replace(title(replace(lower(each.value.effect), "_", " ")), " ", "")
+            #t.effect
+            replace(title(replace(lower(t.effect), "_", " ")), " ", "")
+          )
+        ]
       ))
     }
   )
