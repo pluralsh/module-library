@@ -93,22 +93,48 @@ resource "aws_launch_template" "this" {
 
   # TODO: most of these try statements are probably unnecessary, because they are already set to default null in the variables
 
-  block_device_mappings {
-    device_name = try(var.block_device_mappings.device_name, null)
+  #block_device_mappings {
+  #  device_name = try(var.block_device_mappings.device_name, null)
 
-    ebs {
-      delete_on_termination = try(var.block_device_mappings.ebs.delete_on_termination, null)
-      encrypted             = try(var.block_device_mappings.ebs.encrypted, null)
-      iops                  = try(var.block_device_mappings.ebs.iops, null)
-      kms_key_id            = try(var.block_device_mappings.ebs.kms_key_id, null)
-      snapshot_id           = try(var.block_device_mappings.ebs.snapshot_id, null)
-      throughput            = try(var.block_device_mappings.ebs.throughput, null)
-      volume_size           = try(var.block_device_mappings.ebs.volume_size, null)
-      volume_type           = try(var.block_device_mappings.ebs.volume_type, null)
+  #  ebs {
+  #    delete_on_termination = try(var.block_device_mappings.ebs.delete_on_termination, null)
+  #    encrypted             = try(var.block_device_mappings.ebs.encrypted, null)
+  #    iops                  = try(var.block_device_mappings.ebs.iops, null)
+  #    kms_key_id            = try(var.block_device_mappings.ebs.kms_key_id, null)
+  #    snapshot_id           = try(var.block_device_mappings.ebs.snapshot_id, null)
+  #    throughput            = try(var.block_device_mappings.ebs.throughput, null)
+  #    volume_size           = try(var.block_device_mappings.ebs.volume_size, null)
+  #    volume_type           = try(var.block_device_mappings.ebs.volume_type, null)
+  #  }
+
+  #  no_device    = try(var.block_device_mappings.no_device, null)
+  #  virtual_name = try(var.block_device_mappings.virtual_name, null)
+  #}
+
+  dynamic "block_device_mappings" {
+    for_each = var.block_device_mappings
+
+    content {
+      device_name = try(block_device_mappings.value.device_name, null)
+
+      dynamic "ebs" {
+        for_each = try([block_device_mappings.value.ebs], [])
+
+        content {
+          delete_on_termination = try(ebs.value.delete_on_termination, null)
+          encrypted             = try(ebs.value.encrypted, null)
+          iops                  = try(ebs.value.iops, null)
+          kms_key_id            = try(ebs.value.kms_key_id, null)
+          snapshot_id           = try(ebs.value.snapshot_id, null)
+          throughput            = try(ebs.value.throughput, null)
+          volume_size           = try(ebs.value.volume_size, null)
+          volume_type           = try(ebs.value.volume_type, null)
+        }
+      }
+
+      no_device    = try(block_device_mappings.value.no_device, null)
+      virtual_name = try(block_device_mappings.value.virtual_name, null)
     }
-
-    no_device    = try(var.block_device_mappings.no_device, null)
-    virtual_name = try(var.block_device_mappings.virtual_name, null)
   }
 
 
@@ -135,8 +161,12 @@ resource "aws_launch_template" "this" {
   }
 
 
-  enclave_options {
-    enabled = try(var.enclave_options.enabled, false)
+  dynamic "enclave_options" {
+    for_each = length(var.enclave_options) > 0 ? [var.enclave_options] : []
+
+    content {
+      enabled = enclave_options.value.enabled
+    }
   }
 
 
@@ -192,60 +222,67 @@ resource "aws_launch_template" "this" {
   }
 
 
-  #dynamic "network_interfaces" {
-  #  for_each = var.network_interfaces
-  #  content {
-  #    associate_carrier_ip_address = try(each.value.associate_carrier_ip_address, null)
-  #    associate_public_ip_address  = try(each.value.associate_public_ip_address, null)
-  #    delete_on_termination        = try(each.value.delete_on_termination, null)
-  #    description                  = try(each.value.description, null)
-  #    device_index                 = try(each.value.device_index, null)
-  #    interface_type               = try(each.value.interface_type, null)
-  #    ipv4_address_count           = try(each.value.ipv4_address_count, null)
-  #    ipv4_addresses               = try(each.value.ipv4_addresses, [])
-  #    ipv6_address_count           = try(each.value.ipv6_address_count, null)
-  #    ipv6_addresses               = try(each.value.ipv6_addresses, [])
-  #    network_interface_id         = try(each.value.network_interface_id, null)
-  #    private_ip_address           = try(each.value.private_ip_address, null)
-  #    # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/4570
-  #    security_groups = compact(concat(try(network_interfaces.value.security_groups, []), local.security_group_ids))
-  #    # Set on EKS managed node group, will fail if set here
-  #    # https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html#launch-template-basics
-  #    # subnet_id       = try(network_interfaces.value.subnet_id, null)
-  #  }
-  #}
+  dynamic "network_interfaces" {
+    for_each = var.network_interfaces
+    content {
+      associate_carrier_ip_address = try(each.value.associate_carrier_ip_address, null)
+      associate_public_ip_address  = try(each.value.associate_public_ip_address, null)
+      delete_on_termination        = try(each.value.delete_on_termination, null)
+      description                  = try(each.value.description, null)
+      device_index                 = try(each.value.device_index, null)
+      interface_type               = try(each.value.interface_type, null)
+      ipv4_address_count           = try(each.value.ipv4_address_count, null)
+      ipv4_addresses               = try(each.value.ipv4_addresses, [])
+      ipv6_address_count           = try(each.value.ipv6_address_count, null)
+      ipv6_addresses               = try(each.value.ipv6_addresses, [])
+      network_interface_id         = try(each.value.network_interface_id, null)
+      private_ip_address           = try(each.value.private_ip_address, null)
+      security_groups              = compact(concat(try(network_interfaces.value.security_groups, []), local.security_group_ids))
+    }
+  }
 
-  #placement {
-  #  affinity                = try(var.placement.affinity, null)
-  #  availability_zone       = try(var.placement.availability_zone, null)
-  #  group_name              = try(var.placement.group_name, null)
-  #  host_id                 = try(var.placement.host_id, null)
-  #  host_resource_group_arn = try(var.placement.host_resource_group_arn, null)
-  #  partition_number        = try(var.placement.partition_number, null)
-  #  spread_domain           = try(var.placement.spread_domain, null)
-  #  tenancy                 = try(var.placement.tenancy, null)
-  #}
+  dynamic "placement" {
+    for_each = length(var.placement) > 0 ? [var.placement] : []
 
+    content {
+      affinity                = try(placement.value.affinity, null)
+      availability_zone       = try(placement.value.availability_zone, null)
+      group_name              = try(placement.value.group_name, null)
+      host_id                 = try(placement.value.host_id, null)
+      host_resource_group_arn = try(placement.value.host_resource_group_arn, null)
+      partition_number        = try(placement.value.partition_number, null)
+      spread_domain           = try(placement.value.spread_domain, null)
+      tenancy                 = try(placement.value.tenancy, null)
+    }
+  }
 
   #ram_disk_id = var.ram_disk_id
 
-  #dynamic "tag_specifications" {
-  #  for_each = toset(var.tag_specifications)
+  dynamic "tag_specifications" {
+    for_each = toset(var.tag_specifications)
 
-  #  content {
-  #    resource_type = tag_specifications.key
-  #    tags          = merge(var.tags, { Name = var.name }, var.launch_template_tags)
-  #  }
-  #}
+    content {
+      resource_type = tag_specifications.key
+      tags          = merge(var.tags, { Name = var.name }, var.launch_template_tags)
+    }
+  }
 
-  #cpu_options {
-  #  core_count       = try(var.cpu_options.cpu_options.value.core_count, null)
-  #  threads_per_core = try(var.cpu_options.threads_per_core, null)
-  #}
+  dynamic "cpu_options" {
+    for_each = length(var.cpu_options) > 0 ? [var.cpu_options] : []
 
-  #credit_specification {
-  #  cpu_credits = try(var.credit_specification.cpu_credits, null)
-  #}
+    content {
+      core_count       = try(cpu_options.value.core_count, null)
+      threads_per_core = try(cpu_options.value.threads_per_core, null)
+    }
+  }
+
+  dynamic "credit_specification" {
+    for_each = length(var.credit_specification) > 0 ? [var.credit_specification] : []
+
+    content {
+      cpu_credits = try(credit_specification.value.cpu_credits, null)
+    }
+  }
 
 
   update_default_version = var.update_launch_template_default_version
