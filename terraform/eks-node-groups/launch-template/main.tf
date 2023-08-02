@@ -153,29 +153,43 @@ resource "aws_launch_template" "this" {
     }
   }
 
-  #instance_market_options {
-  #  market_type = try(var.instance_market_options.market_type, null)
+  dynamic "instance_market_options" {
+    for_each = length(var.instance_market_options) > 0 ? [var.instance_market_options] : []
+    content {
+      market_type = try(instance_market_options.value.market_type, null)
+      dynamic "spot_options" {
+        for_each = try([instance_market_options.value.spot_options], [])
 
-  #  spot_options {
-  #    block_duration_minutes         = try(var.instance_market_options.spot_options.block_duration_minutes, null)
-  #    instance_interruption_behavior = try(var.instance_market_options.spot_options.instance_interruption_behavior, null)
-  #    max_price                      = try(var.instance_market_options.spot_options.max_price, null)
-  #    spot_instance_type             = try(var.instance_market_options.spot_options.spot_instance_type, null)
-  #    valid_until                    = try(var.instance_market_options.spot_options.valid_until, null)
-  #  }
-  #}
+        content {
+          block_duration_minutes         = try(spot_options.value.block_duration_minutes, null)
+          instance_interruption_behavior = try(spot_options.value.instance_interruption_behavior, null)
+          max_price                      = try(spot_options.value.max_price, null)
+          spot_instance_type             = try(spot_options.value.spot_instance_type, null)
+          valid_until                    = try(spot_options.value.valid_until, null)
+        }
+      }
+    }
+  }
 
+  dynamic "metadata_options" {
+    for_each = length(var.metadata_options) > 0 ? [var.metadata_options] : []
 
-  #metadata_options {
-  #  http_endpoint               = try(var.metadata_options.http_endpoint, null)
-  #  http_protocol_ipv6          = try(var.metadata_options.http_protocol_ipv6, null)
-  #  http_put_response_hop_limit = try(var.metadata_options.http_put_response_hop_limit, null)
-  #  http_tokens                 = try(var.metadata_options.http_tokens, null)
-  #}
+    content {
+      http_endpoint               = try(metadata_options.value.http_endpoint, null)
+      http_protocol_ipv6          = try(metadata_options.value.http_protocol_ipv6, null)
+      http_put_response_hop_limit = try(metadata_options.value.http_put_response_hop_limit, null)
+      http_tokens                 = try(metadata_options.value.http_tokens, null)
+      instance_metadata_tags      = try(metadata_options.value.instance_metadata_tags, null)
+    }
+  }
 
-  #monitoring {
-  #  enabled = var.enable_monitoring
-  #}
+  dynamic "monitoring" {
+    for_each = var.enable_monitoring ? [1] : []
+
+    content {
+      enabled = var.enable_monitoring
+    }
+  }
 
 
   #dynamic "network_interfaces" {
