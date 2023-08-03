@@ -169,9 +169,6 @@ resource "aws_launch_template" "this" {
     }
   }
 
-
-  # # Set on node group instead
-  # instance_type = var.launch_template_instance_type
   kernel_id = var.kernel_id
   key_name  = var.create_key_pair ? aws_key_pair.this[0].key_name : var.key_name
 
@@ -256,7 +253,7 @@ resource "aws_launch_template" "this" {
     }
   }
 
-  #ram_disk_id = var.ram_disk_id
+  ram_disk_id = var.ram_disk_id
 
   dynamic "tag_specifications" {
     for_each = toset(var.tag_specifications)
