@@ -206,7 +206,7 @@ resource "aws_launch_template" "this" {
       http_protocol_ipv6          = try(metadata_options.value.http_protocol_ipv6, null)
       http_put_response_hop_limit = try(metadata_options.value.http_put_response_hop_limit, null)
       http_tokens                 = try(metadata_options.value.http_tokens, null)
-      instance_metadata_tags      = try(metadata_options.value.instance_metadata_tags, null)
+      #instance_metadata_tags      = try(metadata_options.value.instance_metadata_tags, null)
     }
   }
 
