@@ -77,6 +77,9 @@ module "user_data" {
           )
         ]
       ))
+    },
+    {
+      "--max-pods" = "${var.max_pods_per_node}"
     }
   )
   bootstrap_extra_args    = var.bootstrap_extra_args
