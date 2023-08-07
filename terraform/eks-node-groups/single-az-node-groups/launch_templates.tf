@@ -55,5 +55,6 @@ module "launch_templates" {
   kubelet_extra_args        = try(each.value.kubelet_extra_args, {})
   k8s_labels                = merge(local.node_groups_merged[each.key]["k8s_labels"], try(each.value.k8s_labels, {}))
   k8s_taints                = concat(local.node_groups_merged[each.key]["k8s_taints"], try(each.value.k8s_taints, []))
+  max_pods_per_node         = try(each.value.max_pods_per_node, 32)
   depends_on                = [random_pet.node_groups]
 }
