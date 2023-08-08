@@ -278,6 +278,6 @@ variable "max_pods_per_node" {
   default     = 32
 }
 
-variable "owners" {
+variable "ami_owners" {
   type = list(string)
 }
