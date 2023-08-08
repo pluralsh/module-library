@@ -15,6 +15,7 @@ module "launch_templates" {
   # one of the following must be specified
   ami_id          = try(each.value.ami_id, null)
   ami_filter_name = try(each.value.ami_filter_name, null)
+  ami_owners      = try(each.value.ami_owners, [])
   # optional
   create_key_pair                        = try(each.value.create_key_pair, false)
   key_name                               = try(each.value.key_name, null)

@@ -277,3 +277,7 @@ variable "max_pods_per_node" {
   type        = number
   default     = 32
 }
+
+variable "owners" {
+  type = list(string)
+}
