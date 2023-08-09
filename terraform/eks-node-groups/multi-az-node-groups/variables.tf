@@ -25,7 +25,7 @@ variable "node_groups" {
 }
 
 variable "launch_templates" {
-  description = "Map of maps of `launch_templates` to create."
+  description = "Map of maps of `launch_templates` to create. The keys of this map must match the keys of `var.node_groups`. See \"`launch_templates`\" section in README.md for more details"
   type        = any
   default     = {}
 }
@@ -44,8 +44,8 @@ variable "set_desired_size" {
   default     = false
 }
 
-variable "private_subnet_ids" {
-  description = "A list of private subnet IDs for the EKS worker groups."
-  type        = list(string)
+variable "private_subnets" {
+  description = "A list of private subnets for the EKS worker groups."
+  type        = list(any)
   default     = []
 }
