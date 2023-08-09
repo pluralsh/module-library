@@ -12,7 +12,7 @@ module "launch_templates" {
   launch_template_use_name_prefix = try(each.value.launch_template_use_name_prefix, false)
   launch_template_description     = try(each.value.launch_template_description, null)
   ebs_optimized                   = try(each.value.ebs_optimized, false)
-  # one of the following must be specified
+  # one of the following must be specified, either ami_id or a combination of ami_filter_name & ami_owners 
   ami_id          = try(each.value.ami_id, null)
   ami_filter_name = try(each.value.ami_filter_name, null)
   ami_owners      = try(each.value.ami_owners, [])
