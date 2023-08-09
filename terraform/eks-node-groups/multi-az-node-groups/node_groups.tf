@@ -35,9 +35,9 @@ resource "aws_eks_node_group" "workers" {
     for_each = each.value["launch_template_id"] != null ? [{
       id      = each.value["launch_template_id"]
       version = each.value["launch_template_version"]
-      }] : (try(module.launch_templates[each.value.set_name].launch_template_id, null) != null ? [{
-        id      = module.launch_templates[each.value.set_name].launch_template_id
-        version = module.launch_templates[each.value.set_name].launch_template_latest_version
+      }] : (try(module.launch_templates[each.key].launch_template_id, null) != null ? [{
+        id      = module.launch_templates[each.key].launch_template_id
+        version = module.launch_templates[each.key].launch_template_latest_version
     }] : [])
 
     content {
