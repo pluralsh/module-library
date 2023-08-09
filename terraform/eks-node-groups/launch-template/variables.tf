@@ -34,6 +34,11 @@ variable "ami_filter_name" {
   default     = null
 }
 
+variable "ami_owners" {
+  description = "A list of owners used to select an AMI used together with the ami_filter_name. Only one owner can be specified, but it has to be a list."
+  type        = list(string)
+}
+
 variable "ami_id" {
   description = "The AMI from which to launch the instance. If an AMI is specified, `ami_name_filter` will be ignored"
   type        = string
@@ -276,8 +281,4 @@ variable "max_pods_per_node" {
   description = "The maximum number of pods to schedule per node"
   type        = number
   default     = 32
-}
-
-variable "ami_owners" {
-  type = list(string)
 }
