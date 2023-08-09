@@ -94,7 +94,6 @@ resource "aws_autoscaling_group_tag" "taints" {
     # but on our node pools the effect needs to be NO_EXECUTE, NO_SCHEDULE, PREFER_NO_SCHEDULE
     # so this abomination of replace, title and lower transforms them from the ENUM style to
     # their TitleCase variant
-    # lol
     value               = each.value.value != "" ? "${each.value.value}:${replace(title(replace(lower(each.value.effect), "_", " ")), " ", "")}" : replace(title(replace(lower(each.value.effect), "_", " ")), " ", "")
     propagate_at_launch = true
   }

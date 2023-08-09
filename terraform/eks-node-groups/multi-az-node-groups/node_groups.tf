@@ -35,7 +35,10 @@ resource "aws_eks_node_group" "workers" {
     for_each = each.value["launch_template_id"] != null ? [{
       id      = each.value["launch_template_id"]
       version = each.value["launch_template_version"]
-    }] : []
+      }] : (try(module.launch_templates[each.value.set_name].launch_template_id, null) != null ? [{
+        id      = module.launch_templates[each.value.set_name].launch_template_id
+        version = module.launch_templates[each.value.set_name].launch_template_latest_version
+    }] : [])
 
     content {
       id      = launch_template.value["id"]
@@ -63,7 +66,7 @@ resource "aws_eks_node_group" "workers" {
     ignore_changes        = [scaling_config.0.desired_size]
   }
 
-  depends_on           = [var.ng_depends_on]
+  depends_on           = [var.ng_depends_on, module.launch_templates]
   force_update_version = true
 }
 
