@@ -1,6 +1,5 @@
 locals {
   security_group_ids = compact(concat([var.cluster_primary_security_group_id], var.vpc_security_group_ids))
-  #has_taints         = length(var.k8s_taints) > 0 || length(try(var.kubelet_extra_args["--register-with-taints"], [])) > 0
 }
 
 data "aws_ami" "ami" {
@@ -10,8 +9,7 @@ data "aws_ami" "ami" {
   most_recent = true
   owners      = var.ami_owners
   filter {
-    name = "name"
-    #values = ["ubuntu-eks/k8s_${var.kubernetes_version}/images/hvm-ssd/ubuntu-focal-20.04-${each.key}-server-*"]
+    name   = "name"
     values = [var.ami_filter_name]
   }
 
@@ -41,10 +39,7 @@ resource "tls_private_key" "this" {
   rsa_bits  = 4096
 }
 
-
-
 module "user_data" {
-  #source = "../user_data"
   source = "github.com/pluralsh/module-library//terraform/eks-node-groups/user-data?ref=feat-ubuntu-ng"
 
   cluster_name = var.cluster_name
@@ -139,7 +134,6 @@ resource "aws_launch_template" "this" {
     }
   }
 
-
   dynamic "enclave_options" {
     for_each = length(var.enclave_options) > 0 ? [var.enclave_options] : []
 
@@ -185,7 +179,6 @@ resource "aws_launch_template" "this" {
       http_protocol_ipv6          = try(metadata_options.value.http_protocol_ipv6, null)
       http_put_response_hop_limit = try(metadata_options.value.http_put_response_hop_limit, null)
       http_tokens                 = try(metadata_options.value.http_tokens, null)
-      #instance_metadata_tags      = try(metadata_options.value.instance_metadata_tags, null)
     }
   }
 
@@ -264,13 +257,6 @@ resource "aws_launch_template" "this" {
   vpc_security_group_ids = length(var.network_interfaces) > 0 ? [] : local.security_group_ids
 
   tags = var.tags
-
-  # TODO: check if this is needed, dont think so though
-  ## Prevent premature access of policies by pods that
-  ## require permissions on create/destroy that depend on nodes
-  #depends_on = [
-  #  aws_iam_role_policy_attachment.this,
-  #]
 
   lifecycle {
     create_before_destroy = true
