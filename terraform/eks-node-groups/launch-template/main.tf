@@ -29,8 +29,7 @@ resource "aws_key_pair" "this" {
   count = var.create_key_pair ? 1 : 0
 
   key_name_prefix = var.launch_template_name
-  #public_key      = trimspace(tls_private_key.this[0].public_key_openssh)
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFUvl5clm3cGh7k3ItY7JkFNWhUHqbBrxPMbqejikFADc26NBq4wmsz4cZxVroKf8J3HMhJpjDbJk0w+q43R50ndDjiJ91Y3zX7EupxzgqOhPa4GZps0csGt8e5I9xz3xvGHtefHxl7minU8Wm9CKg0GBRv3yLaan1VLn5WLqooCo6qt/PHI01oERLQeE3qdT5m3kmRZ7wSBqGQBMHfeNDvXFRVkURQ+7Ak+93TuuL/fISpjHk4P+ALbbyqXwUid7g8UgyeWBJTwOQxUSyNrJ6zn1sYq7doXHx41MZiH4RvCUmQCtp9PBgN4PwjgHOQ8/Zyk6Syaf5LtWXlqeXrJCH"
+  public_key      = trimspace(tls_private_key.this[0].public_key_openssh)
 
   tags = var.tags
 }
@@ -93,27 +92,6 @@ resource "aws_launch_template" "this" {
 
   image_id  = coalesce(var.ami_id, data.aws_ami.ami.id)
   user_data = module.user_data.user_data
-
-  # TODO: most of these try statements are probably unnecessary, because they are already set to default null in the variables
-
-  #block_device_mappings {
-  #  device_name = try(var.block_device_mappings.device_name, null)
-
-  #  ebs {
-  #    delete_on_termination = try(var.block_device_mappings.ebs.delete_on_termination, null)
-  #    encrypted             = try(var.block_device_mappings.ebs.encrypted, null)
-  #    iops                  = try(var.block_device_mappings.ebs.iops, null)
-  #    kms_key_id            = try(var.block_device_mappings.ebs.kms_key_id, null)
-  #    snapshot_id           = try(var.block_device_mappings.ebs.snapshot_id, null)
-  #    throughput            = try(var.block_device_mappings.ebs.throughput, null)
-  #    volume_size           = try(var.block_device_mappings.ebs.volume_size, null)
-  #    volume_type           = try(var.block_device_mappings.ebs.volume_type, null)
-  #  }
-
-  #  no_device    = try(var.block_device_mappings.no_device, null)
-  #  virtual_name = try(var.block_device_mappings.virtual_name, null)
-  #}
-
   dynamic "block_device_mappings" {
     for_each = var.block_device_mappings
 
@@ -139,8 +117,6 @@ resource "aws_launch_template" "this" {
       virtual_name = try(block_device_mappings.value.virtual_name, null)
     }
   }
-
-
 
   default_version         = var.launch_template_default_version
   description             = var.launch_template_description
@@ -220,7 +196,6 @@ resource "aws_launch_template" "this" {
       enabled = var.enable_monitoring
     }
   }
-
 
   dynamic "network_interfaces" {
     for_each = var.network_interfaces
