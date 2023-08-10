@@ -73,9 +73,7 @@ module "user_data" {
         ]
       ))
     },
-    {
-      "--max-pods" = "${var.max_pods_per_node}"
-    }
+    try(var.max_pods_per_node, null) != null ? { "--max-pods" = "${var.max_pods_per_node}" } : {}
   )
   bootstrap_extra_args    = var.bootstrap_extra_args
   user_data_template_path = var.user_data_template_path

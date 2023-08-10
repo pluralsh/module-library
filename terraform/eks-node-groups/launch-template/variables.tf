@@ -280,5 +280,5 @@ variable "create_key_pair" {
 variable "max_pods_per_node" {
   description = "The maximum number of pods to schedule per node"
   type        = number
-  default     = 32
+  default     = null
 }
