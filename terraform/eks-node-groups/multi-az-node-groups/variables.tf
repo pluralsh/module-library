@@ -45,7 +45,7 @@ variable "set_desired_size" {
 }
 
 variable "private_subnet_ids" {
-  description = "A list of private subnets for the EKS worker groups."
+  description = "A list of private subnet IDs for the EKS worker groups."
   type        = list(string)
   default     = []
 }
