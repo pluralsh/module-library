@@ -1,12 +1,10 @@
 
 
 module "launch_templates" {
-  #source   = "../launch-template"
   source   = "github.com/pluralsh/module-library//terraform/eks-node-groups/launch-template?ref=feat-ubuntu-ng"
   for_each = var.launch_templates
 
   tags = try(each.value.tags, {})
-  #launch_template_name = lookup(each.value, "launch_template_name", join("-", [var.cluster_name, each.key, random_pet.node_groups[each.key].id]))
   # required
   launch_template_name            = try(each.value.launch_template_name, join("-", [var.cluster_name, each.key]))
   launch_template_use_name_prefix = try(each.value.launch_template_use_name_prefix, false)
