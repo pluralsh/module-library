@@ -22,26 +22,27 @@ locals {
     },
     var.node_groups_defaults,
     v,
-  )}
+  ) }
 
-  node_groups_temp = flatten([ for k, v in local.node_groups_merged:
-     [ for index, subnet in var.private_subnets:
-        {"${k}-${subnet.availability_zone}" = merge(
-            v,
-            {
-              subnets = [subnet.id]
-              min_capacity = ceil(v.min_capacity/length(var.private_subnets))
-              max_capacity = ceil(v.max_capacity/length(var.private_subnets))
-              desired_capacity = ceil(v.desired_capacity/length(var.private_subnets))
-              name = "${v.name}-${subnet.availability_zone}-${subnet.id}"
-              labels = merge(
-                lookup(v, "labels", {}),
-                {"topology.ebs.csi.aws.com/zone" = "${subnet.availability_zone}"}
-              )
-            },
+  node_groups_temp = flatten([for k, v in local.node_groups_merged :
+    [for index, subnet in var.private_subnets :
+      { "${k}-${subnet.availability_zone}" = merge(
+        v,
+        {
+          subnets          = [subnet.id]
+          min_capacity     = ceil(v.min_capacity / length(var.private_subnets))
+          max_capacity     = ceil(v.max_capacity / length(var.private_subnets))
+          desired_capacity = ceil(v.desired_capacity / length(var.private_subnets))
+          name             = "${v.name}-${subnet.availability_zone}-${subnet.id}"
+          set_name         = "${k}"
+          labels = merge(
+            lookup(v, "labels", {}),
+            { "topology.ebs.csi.aws.com/zone" = "${subnet.availability_zone}" }
           )
-        } if contains(data.aws_ec2_instance_type_offerings.node_groups[k].locations, subnet.availability_zone)
-     ]
+        },
+        )
+      } if contains(data.aws_ec2_instance_type_offerings.node_groups[k].locations, subnet.availability_zone)
+    ]
   ])
 
   node_groups_expanded = zipmap(
