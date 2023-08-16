@@ -24,12 +24,6 @@ variable "node_groups" {
   default     = {}
 }
 
-variable "launch_templates" {
-  description = "Map of maps of `launch_templates` to create. The keys of this map must match the keys of `var.node_groups`. See \"`launch_templates`\" section in README.md for more details"
-  type        = any
-  default     = {}
-}
-
 # Hack for a homemade `depends_on` https://discuss.hashicorp.com/t/tips-howto-implement-module-depends-on-emulation/2305/2
 # Will be removed in Terraform 0.13 with the support of module's `depends_on` https://github.com/hashicorp/terraform/issues/10462
 variable "ng_depends_on" {
