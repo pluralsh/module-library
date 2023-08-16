@@ -40,7 +40,6 @@ resource "tls_private_key" "this" {
 }
 
 module "user_data" {
-  #source = "github.com/pluralsh/module-library//terraform/eks-node-groups/user-data?ref=feat-ubuntu-ng"
   source = "./user-data"
 
   cluster_name = var.cluster_name
