@@ -1,7 +1,8 @@
 
 
 module "launch_templates" {
-  source   = "github.com/pluralsh/module-library//terraform/eks-node-groups/launch-template?ref=feat-ubuntu-ng"
+  #source   = "github.com/pluralsh/module-library//terraform/eks-node-groups/launch-template?ref=feat-ubuntu-ng"
+  source   = "../launch-template"
   for_each = var.launch_templates
 
   tags = try(each.value.tags, {})
