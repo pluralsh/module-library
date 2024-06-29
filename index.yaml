@@ -154,6 +154,17 @@ entries:
   oidc-config:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-06-29T13:31:43.357568425Z"
+    description: Populates basic oauth2 proxy config for use with plural's oauth2
+      injector
+    digest: 92117d81e4e580e79f7582951e233d7c1a854791a8cd34b94736d2fee13ec6a4
+    name: oidc-config
+    type: application
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/oidc-config-0.1.7/oidc-config-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-03-13T06:13:46.114016489Z"
     description: Populates basic oauth2 proxy config for use with plural's oauth2
       injector
@@ -621,4 +632,4 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.0/test-base-0.1.0.tgz
     version: 0.1.0
-generated: "2023-07-11T11:01:35.572015768Z"
+generated: "2024-06-29T13:31:43.357688118Z"
