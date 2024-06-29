@@ -8,6 +8,7 @@ secret:
   clientID: PLACEHOLDER
   clientSecret: PLACEHOLDER
   cookieSecret: PLACEHOLDER
+  oidcScopes: "openid profile"
   env: {}
 
 service:
