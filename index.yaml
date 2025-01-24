@@ -117,6 +117,15 @@ entries:
   mysql:
   - apiVersion: v2
     appVersion: v0.6.3
+    created: "2025-01-24T15:51:26.101698Z"
+    description: A Helm chart for easy deployment of a MySQL cluster with MySQL operator.
+    digest: 56269e0b08242b52a9938bbebea3c9ae50bf92e6b27abe4c81805646a67e5364
+    name: mysql
+    urls:
+    - https://github.com/pluralsh/module-library/releases/download/mysql-0.6.7/mysql-0.6.7.tgz
+    version: 0.6.7
+  - apiVersion: v2
+    appVersion: v0.6.3
     created: "2023-05-30T14:23:32.86097638Z"
     description: A Helm chart for easy deployment of a MySQL cluster with MySQL operator.
     digest: 18cee3bfb0c4c2857881a52e1ef5f7f5d757cf5cabfaade8b4f529a5c3df1c7c
@@ -632,4 +641,4 @@ entries:
     urls:
     - https://github.com/pluralsh/module-library/releases/download/test-base-0.1.0/test-base-0.1.0.tgz
     version: 0.1.0
-generated: "2024-06-29T13:31:43.357688118Z"
+generated: "2025-01-24T15:51:26.101884779Z"
