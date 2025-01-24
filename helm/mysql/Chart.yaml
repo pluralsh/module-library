@@ -2,4 +2,4 @@ apiVersion: v2
 appVersion: v0.6.3
 description: A Helm chart for easy deployment of a MySQL cluster with MySQL operator.
 name: mysql
-version: 0.6.6
+version: 0.6.7

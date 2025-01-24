@@ -20,6 +20,21 @@ spec:
   image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
   {{- end }}
 
+  {{- if .Values.addVolumePermissions }}
+  initContainers:
+    - name: volume-permissions
+      image: busybox
+      securityContext:
+        runAsUser: 0
+      command:
+        - sh
+        - -c
+        - chmod 750 /data/mysql; chown {{ .Values.uid }}:{{ .Values.uid }} /data/mysql
+      volumeMounts:
+        - name: data
+          mountPath: /data/mysql
+  {{- end }}
+
   {{- if .Values.mysqlVersion }}
   mysqlVersion: {{ .Values.mysqlVersion | quote }}
   {{- end }}
