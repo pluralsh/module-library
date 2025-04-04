@@ -12,7 +12,7 @@ spec:
     - alert: {{ .Values.dbName }}PostgreSQLCpuHigh
       expr: |
         (
-          sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"}[5m])) 
+          sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"}[5m]))
           / sum(kube_pod_container_resource_requests{endpoint="http",namespace="{{ .Release.Namespace }}", pod=~"{{ include "postgres.crd-name" . }}-[0-9]+", resource="cpu"})
         )  > 0.6
       for: 5m
@@ -25,7 +25,7 @@ spec:
     - alert: {{ .Values.dbName }}PostgreSQLMemHigh
       expr: |
         (
-          sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"})
+          sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"{{ include "postgres.crd-name" . }}-[0-9]+",image!="",container!="")
           / sum(kube_pod_container_resource_requests{endpoint="http",resource="memory",namespace="{{ .Release.Namespace }}", pod=~"{{ include "postgres.crd-name" . }}-[0-9]+"})
         )  > 1
       for: 5m
