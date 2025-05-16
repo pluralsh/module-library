@@ -1,3 +1,4 @@
+{{ if .Values.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -15,3 +16,4 @@ spec:
   selector:
     matchLabels:
       endpoint: oauth2-proxy
+{{ end}}

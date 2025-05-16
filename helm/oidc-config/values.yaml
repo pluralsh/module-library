@@ -18,3 +18,6 @@ service:
   metricsPort: 44180
 
 users: {}
+
+serviceMonitor:
+  enabled: false
