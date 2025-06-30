@@ -33,7 +33,7 @@ spec:
     prometheus:
       format: memory
       legend: $pod
-      query: sum(container_memory_working_set_bytes{namespace="{{ $ctx.Release.Namespace }}",pod=~"{{ $podRegex }}"}) by (pod)
+      query: sum(container_memory_working_set_bytes{namespace="{{ $ctx.Release.Namespace }}",pod=~"{{ $podRegex }}",image!="",container!=""}) by (pod)
   - name: {{ $name }}
     type: kubernetes
     kubernetes:
